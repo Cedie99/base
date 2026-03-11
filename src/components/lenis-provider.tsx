@@ -12,6 +12,7 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => 1 - Math.pow(1 - t, 3),
+      prevent: (node: HTMLElement) => node.tagName === "TEXTAREA",
     });
     lenisRef.current = lenis;
 

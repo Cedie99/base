@@ -16,7 +16,7 @@ export default async function Home() {
   const [session, counts, recent] = await Promise.all([
     auth(),
     getCategoryCounts(),
-    getRecentListings(),
+    getRecentListings(5),
   ]);
 
   const totalListings = Object.values(counts).reduce((sum, n) => sum + n, 0);

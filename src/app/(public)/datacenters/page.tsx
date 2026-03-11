@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { Server, Plus, Inbox } from "lucide-react";
+import { Server, Inbox } from "lucide-react";
 import { getPublicListingsByCategory } from "@/lib/listings.queries";
 import { CategoryListingCard } from "@/components/public/category-listing-card";
+import { AddListingButton } from "@/components/submission/add-listing-button";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -26,13 +26,7 @@ export default async function DatacentersPage() {
             </p>
           </div>
         </div>
-        <Link
-          href="/datacenters/new"
-          className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-neutral-200 dark:bg-white dark:text-black dark:hover:bg-neutral-200"
-        >
-          <Plus className="h-4 w-4" />
-          Add Data Center
-        </Link>
+        <AddListingButton category="datacenter" label="Add Data Center" />
       </div>
       {listings.length > 0 ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -49,13 +43,11 @@ export default async function DatacentersPage() {
               Be the first to add a data center to the database.
             </p>
           </div>
-          <Link
-            href="/datacenters/new"
+          <AddListingButton
+            category="datacenter"
+            label="Add Data Center"
             className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 px-4 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-300 transition-colors hover:border-neutral-300 dark:hover:border-neutral-700 hover:text-neutral-900 dark:hover:text-white"
-          >
-            <Plus className="h-4 w-4" />
-            Add Data Center
-          </Link>
+          />
         </div>
       )}
     </div>

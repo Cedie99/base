@@ -38,6 +38,17 @@ export const createListingSchema = z.object({
   overview: z.string().optional(),
   logoUrl: z.string().url("Invalid URL").optional().or(z.literal("")),
 
+  // Additional fields
+  blogFeedUrl: z.string().url("Invalid URL").optional().or(z.literal("")),
+  numberOfDatacenters: z.coerce
+    .number()
+    .int()
+    .positive()
+    .optional()
+    .or(z.literal("")),
+  totalSquareFootage: z.string().optional(),
+  stockTicker: z.string().optional(),
+
   // People-specific
   firstName: z.string().optional(),
   lastName: z.string().optional(),

@@ -141,6 +141,17 @@ export async function getCategoryCounts() {
   return counts;
 }
 
+export async function getAllApprovedListings(category?: Category) {
+  const conditions = [eq(listings.approvalStatus, "approved")];
+  if (category) {
+    conditions.push(eq(listings.category, category));
+  }
+  return db.query.listings.findMany({
+    where: and(...conditions),
+    orderBy: [desc(listings.updatedAt)],
+  });
+}
+
 export async function getRecentListings(limit = 10) {
   return db.query.listings.findMany({
     where: eq(listings.approvalStatus, "approved"),

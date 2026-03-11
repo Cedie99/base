@@ -11,7 +11,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:seed": "npx tsx src/lib/db/seed.ts"
+    "db:seed": "node --env-file=.env node_modules/tsx/dist/cli.mjs src/lib/db/seed.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",
