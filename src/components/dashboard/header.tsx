@@ -5,7 +5,7 @@ export async function Header() {
   const session = await auth();
 
   return (
-    <header className="flex h-14 items-center justify-between border-b px-6">
+    <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b bg-background px-6">
       <div />
       {session?.user && (
         <UserNav
