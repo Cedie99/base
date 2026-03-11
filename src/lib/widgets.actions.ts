@@ -18,10 +18,12 @@ import {
   listingExternalLinks,
   listingSources,
   listingCoupons,
+  couponVotes,
   personDegrees,
 } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { getCurrentUser } from "@/lib/auth.helpers";
 import type { ActionState } from "@/lib/listings.actions";
 
@@ -507,6 +509,106 @@ export async function removeCoupon(id: string): Promise<ActionState> {
   } catch {
     return { error: "Failed to remove coupon" };
   }
+}
+
+async function getVoterIdentity() {
+  const user = await getCurrentUser();
+  if (user) {
+    return { userId: user.id, voterIp: null };
+  }
+  const headerList = await headers();
+  const ip =
+    headerList.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    headerList.get("x-real-ip") ??
+    "unknown";
+  return { userId: null, voterIp: ip };
+}
+
+export async function voteCoupon(
+  couponId: string,
+  vote: "yes" | "no"
+): Promise<ActionState & { alreadyVoted?: boolean }> {
+  try {
+    const { userId, voterIp } = await getVoterIdentity();
+
+    // Check for existing vote
+    const existing = await db
+      .select({ id: couponVotes.id })
+      .from(couponVotes)
+      .where(
+        userId
+          ? and(
+              eq(couponVotes.couponId, couponId),
+              eq(couponVotes.userId, userId)
+            )
+          : and(
+              eq(couponVotes.couponId, couponId),
+              eq(couponVotes.voterIp, voterIp!)
+            )
+      )
+      .limit(1);
+
+    if (existing.length > 0) {
+      return { alreadyVoted: true, error: "Already voted" };
+    }
+
+    // Insert vote record and increment count atomically
+    await db.insert(couponVotes).values({
+      couponId,
+      userId,
+      voterIp,
+      vote,
+    });
+
+    if (vote === "yes") {
+      await db
+        .update(listingCoupons)
+        .set({ votesYes: sql`${listingCoupons.votesYes} + 1` })
+        .where(eq(listingCoupons.id, couponId));
+    } else {
+      await db
+        .update(listingCoupons)
+        .set({ votesNo: sql`${listingCoupons.votesNo} + 1` })
+        .where(eq(listingCoupons.id, couponId));
+    }
+
+    revalidatePath("/");
+    return { success: true };
+  } catch {
+    return { error: "Failed to record vote" };
+  }
+}
+
+export async function getCouponVotes(
+  couponIds: string[]
+): Promise<Record<string, "yes" | "no">> {
+  if (couponIds.length === 0) return {};
+
+  const { userId, voterIp } = await getVoterIdentity();
+
+  const rows = await db
+    .select({
+      couponId: couponVotes.couponId,
+      vote: couponVotes.vote,
+    })
+    .from(couponVotes)
+    .where(
+      userId
+        ? and(
+            inArray(couponVotes.couponId, couponIds),
+            eq(couponVotes.userId, userId)
+          )
+        : and(
+            inArray(couponVotes.couponId, couponIds),
+            eq(couponVotes.voterIp, voterIp!)
+          )
+    );
+
+  const result: Record<string, "yes" | "no"> = {};
+  for (const row of rows) {
+    result[row.couponId] = row.vote as "yes" | "no";
+  }
+  return result;
 }
 
 // ── Person Degrees ─────────────────────────────────────────

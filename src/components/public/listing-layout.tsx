@@ -20,12 +20,18 @@ import { CouponsWidget } from "./widgets/coupons";
 import { ExternalLinksWidget } from "./widgets/external-links";
 import { SourcesWidget } from "./widgets/sources";
 import { DegreesWidget } from "./widgets/degrees";
+import { getCouponVotes } from "@/lib/widgets.actions";
 
-export function ListingLayout({ listing }: { listing: ListingWithWidgets }) {
+export async function ListingLayout({ listing }: { listing: ListingWithWidgets }) {
   const isPerson = listing.category === "person";
   const showCoupons =
     listing.category === "company" || listing.category === "registrar";
   const showDatacenters = listing.category === "company";
+
+  let userVotes: Record<string, "yes" | "no"> = {};
+  if (showCoupons && listing.coupons.length > 0) {
+    userVotes = await getCouponVotes(listing.coupons.map((c) => c.id));
+  }
 
   return (
     <div className="space-y-8">
@@ -55,7 +61,9 @@ export function ListingLayout({ listing }: { listing: ListingWithWidgets }) {
 
         <div className="space-y-6 lg:sticky lg:top-20 lg:self-start">
           <TagsWidget tags={listing.tags} />
-          {showCoupons && <CouponsWidget coupons={listing.coupons} />}
+          {showCoupons && (
+            <CouponsWidget coupons={listing.coupons} userVotes={userVotes} />
+          )}
           <ExternalLinksWidget links={listing.externalLinks} />
           <SourcesWidget sources={listing.sources} />
         </div>

@@ -138,6 +138,12 @@ export const listings = pgTable(
     overview: text("overview"),
     logoUrl: text("logo_url"),
 
+    // Additional fields
+    blogFeedUrl: text("blog_feed_url"),
+    numberOfDatacenters: integer("number_of_datacenters"),
+    totalSquareFootage: text("total_square_footage"),
+    stockTicker: text("stock_ticker"),
+
     // People-specific fields
     firstName: text("first_name"),
     lastName: text("last_name"),
@@ -553,13 +559,45 @@ export const listingCoupons = pgTable("listing_coupon", {
 
 export const listingCouponsRelations = relations(
   listingCoupons,
-  ({ one }) => ({
+  ({ one, many }) => ({
     listing: one(listings, {
       fields: [listingCoupons.listingId],
       references: [listings.id],
     }),
+    votes: many(couponVotes),
   })
 );
+
+export const couponVotes = pgTable(
+  "coupon_vote",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    couponId: text("coupon_id")
+      .notNull()
+      .references(() => listingCoupons.id, { onDelete: "cascade" }),
+    userId: text("user_id").references(() => users.id),
+    voterIp: text("voter_ip"),
+    vote: text("vote").notNull(), // "yes" | "no"
+    createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("coupon_vote_user_idx").on(table.couponId, table.userId),
+    uniqueIndex("coupon_vote_ip_idx").on(table.couponId, table.voterIp),
+  ]
+);
+
+export const couponVotesRelations = relations(couponVotes, ({ one }) => ({
+  coupon: one(listingCoupons, {
+    fields: [couponVotes.couponId],
+    references: [listingCoupons.id],
+  }),
+  user: one(users, {
+    fields: [couponVotes.userId],
+    references: [users.id],
+  }),
+}));
 
 export const personDegrees = pgTable("person_degree", {
   id: text("id")
