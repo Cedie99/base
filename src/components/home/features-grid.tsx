@@ -1,4 +1,9 @@
+"use client";
+
 import { Zap, Shield, Globe, Code, History, Search } from "lucide-react";
+import { SectionLabel } from "@/components/home/section-label";
+import { useReveal } from "@/hooks/use-reveal";
+import { cn } from "@/lib/utils";
 
 const features = [
   {
@@ -34,21 +39,29 @@ const features = [
 ];
 
 export function FeaturesGrid() {
+  const { ref, isVisible } = useReveal();
+
   return (
     <section className="space-y-10">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white">
-          Why BASE?
-        </h2>
-        <p className="mt-2 text-neutral-500">
-          Everything you need to explore and contribute to the web hosting industry database.
-        </p>
-      </div>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {features.map((f) => (
+      <SectionLabel
+        label="Features"
+        title="Why BASE?"
+        description="Everything you need to explore and contribute to the web hosting industry database."
+      />
+      <div ref={ref} className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {features.map((f, i) => (
           <div
             key={f.title}
-            className="group rounded-2xl border border-neutral-200 bg-white p-6 transition-all duration-300 hover:border-neutral-300 hover:shadow-lg dark:border-neutral-800 dark:bg-neutral-900/50 dark:hover:border-neutral-700 dark:hover:shadow-[0_0_30px_4px_rgba(255,255,255,0.03)]"
+            className={cn(
+              "group rounded-2xl border border-neutral-200 bg-white p-6 transition-all hover:border-neutral-300 hover:shadow-lg dark:border-neutral-800 dark:bg-neutral-900/50 dark:hover:border-neutral-700 dark:hover:shadow-[0_0_30px_4px_rgba(255,255,255,0.03)]",
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-8 opacity-0"
+            )}
+            style={{
+              transitionDuration: "600ms",
+              transitionDelay: isVisible ? `${i * 80}ms` : "0ms",
+            }}
           >
             <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-neutral-200 bg-neutral-50 transition-colors group-hover:border-neutral-300 dark:border-neutral-800 dark:bg-neutral-900 dark:group-hover:border-neutral-700">
               <f.icon className="h-5 w-5 text-neutral-600 dark:text-neutral-300" />

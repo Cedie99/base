@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import { useState } from "react";
+import { LenisProvider } from "@/components/lenis-provider";
+import { ScrollToTop } from "@/components/scroll-to-top";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -13,8 +15,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
       <SessionProvider>
         <QueryClientProvider client={queryClient}>
-          {children}
+          <LenisProvider>
+            {children}
+          </LenisProvider>
           <Toaster />
+          <ScrollToTop />
         </QueryClientProvider>
       </SessionProvider>
     </ThemeProvider>

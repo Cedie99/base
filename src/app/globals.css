@@ -172,6 +172,31 @@
 .stagger-5 { animation-delay: 0.5s; }
 .stagger-6 { animation-delay: 0.6s; }
 
+/* Sparkle fall from line */
+@keyframes sparkle-fall {
+  0% { opacity: 0; transform: translate(0, 0) scale(0); }
+  15% { opacity: 1; transform: translate(calc(var(--drift-x) * 0.1), 2px) scale(1); }
+  100% { opacity: 0; transform: translate(var(--drift-x), 20px) scale(0); }
+}
+.animate-sparkle-fall { animation: sparkle-fall ease-out infinite; }
+
+/* Typewriter cursor blink */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.animate-blink { animation: blink 0.8s step-end infinite; }
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.duration-600 {
+  transition-duration: 600ms;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

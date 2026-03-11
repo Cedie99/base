@@ -27,7 +27,7 @@ export async function Sidebar() {
   );
 
   return (
-    <aside className="flex h-full w-64 flex-col border-r bg-card">
+    <aside className="sticky top-0 flex h-screen w-64 flex-col border-r bg-card">
       <div className="flex h-14 items-center px-6 font-semibold">
         <Link href="/">BASE</Link>
       </div>
