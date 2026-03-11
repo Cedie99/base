@@ -52,6 +52,13 @@ export function RecentActivity({ listings }: { listings: Listing[] }) {
               </Link>
             );
           })}
+          <Link
+            href="/posts"
+            className="group mt-2 flex items-center justify-center gap-2 rounded-xl border border-neutral-200 bg-neutral-50 py-2.5 text-sm font-medium text-neutral-600 transition-all duration-200 hover:border-neutral-300 hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-400 dark:hover:border-neutral-700 dark:hover:bg-neutral-900 dark:hover:text-white"
+          >
+            View all
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+          </Link>
         </div>
       )}
     </section>

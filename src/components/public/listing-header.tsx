@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { Pencil, History } from "lucide-react";
+import { ArrowLeft, History } from "lucide-react";
 import type { ListingWithWidgets } from "@/types/listings";
-import { CATEGORY_SINGULAR, CATEGORY_URL_PREFIX } from "@/types/listings";
+import { CATEGORY_SINGULAR, CATEGORY_URL_PREFIX, CATEGORY_LABELS, CATEGORY_PLURAL_URL } from "@/types/listings";
 import { getCategoryColors, categoryIcons } from "@/lib/utils/category-colors";
+import { EditListingButton } from "@/components/submission/edit-listing-button";
 
 const statusLabels: Record<string, string> = {
   privately_held: "Privately Held",
@@ -18,6 +19,13 @@ export function ListingHeader({ listing }: { listing: ListingWithWidgets }) {
 
   return (
     <div className="space-y-4">
+      <Link
+        href={`/${CATEGORY_PLURAL_URL[listing.category]}`}
+        className="inline-flex items-center gap-1.5 text-sm text-neutral-400 transition-colors hover:text-neutral-700 dark:text-neutral-600 dark:hover:text-neutral-300"
+      >
+        <ArrowLeft className="h-3.5 w-3.5" />
+        {CATEGORY_LABELS[listing.category]}
+      </Link>
       <div className="flex items-start gap-6">
         {listing.logoUrl && !isPerson ? (
           <img
@@ -74,13 +82,7 @@ export function ListingHeader({ listing }: { listing: ListingWithWidgets }) {
         </div>
       </div>
       <div className="flex gap-4 text-sm">
-        <Link
-          href={`/${CATEGORY_URL_PREFIX[listing.category]}/${listing.slug}/edit`}
-          className="inline-flex items-center gap-1.5 text-neutral-500 transition-colors hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"
-        >
-          <Pencil className="h-3.5 w-3.5" />
-          Edit this page
-        </Link>
+        <EditListingButton listing={listing} />
         <Link
           href={`/${CATEGORY_URL_PREFIX[listing.category]}/${listing.slug}/revisions`}
           className="inline-flex items-center gap-1.5 text-neutral-400 transition-colors hover:text-neutral-700 dark:text-neutral-600 dark:hover:text-neutral-300"

@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, Trash2 } from "lucide-react";
+import { MapPin, Plus, Trash2 } from "lucide-react";
 
 export interface OfficeEntry {
   address: string;
@@ -46,13 +46,21 @@ export function OfficesEditor({
   }
 
   return (
-    <div className="rounded-lg border p-6 space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Offices</h2>
-        <Button type="button" variant="outline" size="sm" onClick={addOffice}>
-          <Plus className="mr-1 h-3.5 w-3.5" />
-          Add Office
-        </Button>
+    <div className="rounded-lg border bg-card p-6 space-y-4 h-full">
+      <div className="space-y-1">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted">
+              <MapPin className="h-4 w-4 text-muted-foreground" />
+            </div>
+            <h2 className="text-lg font-semibold">Offices</h2>
+          </div>
+          <Button type="button" variant="outline" size="sm" onClick={addOffice}>
+            <Plus className="mr-1 h-3.5 w-3.5" />
+            Add Office
+          </Button>
+        </div>
+        <p className="text-sm text-muted-foreground">Physical office locations.</p>
       </div>
 
       {offices.length === 0 && (

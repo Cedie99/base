@@ -8,6 +8,7 @@ import { Database, Menu, X, Sun, Moon, User } from "lucide-react";
 import { SearchBar } from "@/components/search/search-bar";
 
 const navLinks = [
+  { href: "/posts", label: "Posts" },
   { href: "/companies", label: "Companies" },
   { href: "/datacenters", label: "Data Centers" },
   { href: "/registrars", label: "Registrars" },

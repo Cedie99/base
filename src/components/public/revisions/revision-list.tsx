@@ -1,4 +1,6 @@
 import type { Revision } from "@/types/listings";
+import { computeRevisionDiff } from "@/lib/utils/revision-diff";
+import { RevisionDiffView } from "./revision-diff-view";
 
 interface RevisionWithUser extends Revision {
   user: { name: string | null; email: string | null } | null;
@@ -55,14 +57,19 @@ export function RevisionList({
               <span>by system</span>
             )}
           </div>
-          {rev.after != null && (
+          {(rev.before != null || rev.after != null) && (
             <details className="mt-2">
               <summary className="cursor-pointer text-xs text-primary hover:underline">
                 View changes
               </summary>
-              <pre className="mt-1 max-h-48 overflow-auto rounded bg-muted p-2 text-xs">
-                {JSON.stringify(rev.after, null, 2)}
-              </pre>
+              <div className="mt-2 rounded bg-muted p-3">
+                <RevisionDiffView
+                  diff={computeRevisionDiff(
+                    rev.before as Record<string, unknown> | null,
+                    rev.after as Record<string, unknown> | null
+                  )}
+                />
+              </div>
             </details>
           )}
         </div>

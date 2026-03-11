@@ -66,6 +66,13 @@ export async function createListing(
           ? data.domainsManaged
           : undefined,
       clients: typeof data.clients === "number" ? data.clients : undefined,
+      numberOfDatacenters:
+        typeof data.numberOfDatacenters === "number"
+          ? data.numberOfDatacenters
+          : undefined,
+      totalSquareFootage: data.totalSquareFootage || null,
+      blogFeedUrl: data.blogFeedUrl || null,
+      stockTicker: data.stockTicker || null,
       companyStatus: data.companyStatus || null,
       approvalStatus,
       createdById: user.id,
@@ -130,6 +137,13 @@ export async function updateListing(
           ? data.domainsManaged
           : undefined,
       clients: typeof data.clients === "number" ? data.clients : undefined,
+      numberOfDatacenters:
+        typeof data.numberOfDatacenters === "number"
+          ? data.numberOfDatacenters
+          : undefined,
+      totalSquareFootage: data.totalSquareFootage || null,
+      blogFeedUrl: data.blogFeedUrl || null,
+      stockTicker: data.stockTicker || null,
       companyStatus: data.companyStatus || null,
       updatedAt: new Date(),
     })
