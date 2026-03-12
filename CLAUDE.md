@@ -32,24 +32,40 @@ src/
 │   │   ├── person/[slug]/       # Listing detail + /edit + /revisions
 │   │   ├── datacenter/[slug]/   # Listing detail + /edit + /revisions
 │   │   ├── registrar/[slug]/    # Listing detail + /edit + /revisions
+│   │   ├── compare/             # Side-by-side listing comparison
+│   │   ├── discussions/         # Community discussion threads + /new + /[id]
+│   │   ├── graph/               # Interactive relationship graph visualization
+│   │   ├── api-docs/            # Public API documentation page
 │   │   ├── search/              # Full search results page
-│   │   └── layout.tsx           # Public chrome (header + footer)
+│   │   └── layout.tsx           # Public chrome (header + footer + CompareProvider)
 │   ├── api/
 │   │   ├── auth/                # NextAuth API route
-│   │   └── search/              # Search API endpoint
+│   │   ├── search/              # Search API endpoint
+│   │   ├── notifications/       # Notifications API (GET user notifications)
+│   │   └── v1/                  # Public REST API
+│   │       ├── listings/        # GET /api/v1/listings, /api/v1/listings/:category/:slug
+│   │       ├── categories/      # GET /api/v1/categories
+│   │       ├── search/          # GET /api/v1/search?q=query
+│   │       ├── graph/           # GET /api/v1/graph?category=optional
+│   │       ├── embed/           # GET /api/v1/embed/:category/:slug (HTML card)
+│   │       └── oembed/          # GET /api/v1/oembed?url= (oEmbed endpoint)
 │   ├── layout.tsx               # Root layout (DM Sans font, providers)
 │   ├── page.tsx                 # Landing page (hero, categories, activity)
 │   └── globals.css              # Tailwind theme + CSS variables + animations
 ├── components/
 │   ├── auth/                    # LoginForm, RegisterForm
-│   ├── dashboard/               # Header, Sidebar, UserNav, moderation/
+│   ├── base-logo.tsx            # SVG logo component with dark mode support
+│   ├── compare/                 # CompareProvider, CompareButton, CompareBar, ComparisonTable
+│   ├── dashboard/               # Header, Sidebar, UserNav, NotificationBell, moderation/
 │   │   └── moderation/          # ModerationQueue, ModerationTabs, PendingEditsQueue
+│   ├── discussions/             # ThreadList, ThreadDetail, CommentForm, CommentItem, ThreadActions
+│   ├── graph/                   # GraphView, GraphCanvas, GraphControls, GraphLegend
 │   ├── home/                    # Hero, CategoryCards, RecentActivity, QuickAdd, etc.
-│   ├── public/                  # PublicHeader, PublicFooter, ListingLayout, widgets/
-│   │   └── widgets/             # 20 widget display components (overview, offices, etc.)
+│   ├── public/                  # PublicHeader, PublicFooter, ListingLayout, ListingDiscussions, widgets/
+│   │   └── widgets/             # 23 widget display components (overview, offices, control-panels, hosting-info, ip-ranges, etc.)
 │   ├── search/                  # SearchBar (with Cmd+K), SearchResultsDropdown
-│   ├── submission/              # SubmissionForm, DuplicateCheck, OfficesEditor, ProductsEditor
-│   ├── ui/                      # shadcn primitives (button, card, input, etc.)
+│   ├── submission/              # SubmissionForm, DuplicateCheck, OfficesEditor, ProductsEditor, ListEditor
+│   ├── ui/                      # shadcn primitives (button, card, input, dialog, time-ago, etc.)
 │   └── providers.tsx            # SessionProvider, QueryClient, ThemeProvider, Toaster
 ├── lib/
 │   ├── auth.ts                  # NextAuth config (credentials + DrizzleAdapter)
@@ -61,19 +77,34 @@ src/
 │   ├── search.queries.ts        # searchListings() with grouped results
 │   ├── moderation.actions.ts    # Approval/rejection: approveListing(), rejectListing(), approveRevision(), rejectRevision()
 │   ├── moderation.queries.ts    # getPendingSubmissions(), getPendingRevisions()
+│   ├── discussions.actions.ts   # createThread(), createComment(), deleteThread(), togglePinThread(), toggleLockThread()
+│   ├── discussions.queries.ts   # getThreads(), getListingThreads(), getThreadById()
+│   ├── notifications.actions.ts # markAsRead(), markAllAsRead()
+│   ├── notifications.queries.ts # getUnreadCount(), getNotifications(), getUserDiscussionStats()
+│   ├── notifications.helpers.ts # createNotification() helper
 │   ├── revisions.queries.ts     # Revision history queries
 │   ├── revisions.ts             # createRevision() helper (supports approvalStatus param, returns revision)
 │   ├── utils.ts                 # cn() helper
 │   ├── utils/
-│   │   └── category-colors.ts   # Category → Tailwind color class mapping
+│   │   ├── category-colors.ts   # Category → Tailwind color class mapping
+│   │   └── revision-diff.ts     # Revision before/after diff utilities
+│   ├── api/                     # Public API v1 helpers
+│   │   ├── middleware.ts        # Rate limiting, error handling, CORS
+│   │   ├── response.ts         # Standardized API response format
+│   │   ├── rate-limit.ts        # 60 req/min per IP rate limiter
+│   │   ├── listings.queries.ts  # API-specific listing queries
+│   │   └── graph.queries.ts     # Graph data queries (nodes + edges from relationships)
 │   ├── validations/
 │   │   ├── listing.ts           # Zod schemas for listing create/update
-│   │   └── widgets.ts           # Zod schemas for all widget types
+│   │   ├── widgets.ts           # Zod schemas for all widget types
+│   │   └── discussions.ts       # Zod schemas for threads and comments
 │   └── db/
-│       ├── schema.ts            # Drizzle schema (users, listings, 17 widget tables, revisions w/ approval tracking)
+│       ├── schema.ts            # Drizzle schema (users, listings, 21 widget/feature tables, revisions w/ approval tracking)
 │       └── index.ts             # DB client (postgres + drizzle, cached in dev)
 ├── types/
 │   ├── listings.ts              # Listing, Widget types, Category constants, PRODUCTS_BY_CATEGORY, RevisionWithRelations
+│   ├── discussions.ts           # Thread, Comment, ThreadWithComments types
+│   ├── graph.ts                 # GraphNode, GraphEdge types
 │   └── next-auth.d.ts           # Session type extensions
 └── middleware.ts                 # Route protection (/dashboard, /login, /register)
 ```
@@ -129,7 +160,16 @@ Each category has **Listings** (profile pages) composed of **Widgets** (modular 
 
 **User roles**: Administrator (full access), Moderator (content approval), User (submit for approval), Anonymous (submit for approval, IP tracked).
 
-**Key features**: live search with auto-complete (Cmd+K), SEO-friendly URLs (`/company/hostgator`), revision history with before/after diffs, duplicate prevention, embeddable listing cards, **pending revision system** (user edits create pending revisions for moderator approval; listing stays live until approved).
+**Key features**:
+- Live search with auto-complete (Cmd+K), SEO-friendly URLs (`/company/hostgator`)
+- Revision history with before/after diffs, duplicate prevention
+- Pending revision system (user edits create pending revisions for moderator approval; listing stays live until approved)
+- Community discussions with threads, comments, and nested replies (per-listing or global)
+- Side-by-side listing comparison (up to 3 listings, same category)
+- Interactive relationship graph visualization (force-directed, filterable by category)
+- Public REST API v1 with rate limiting (60 req/min), oEmbed, and embeddable listing cards
+- Notification system (thread replies, revision decisions, listing approvals) with dashboard bell
+- Embeddable listing cards
 
 **Products are category-specific** (`PRODUCTS_BY_CATEGORY`):
 - Companies: Shared Hosting, VPS, Dedicated, Colocation, Cloud, SSL, etc.

@@ -41,8 +41,8 @@ Modular information blocks within a listing (e.g., description, logo, address, t
 | Role | Permissions |
 |---|---|
 | **Administrator** | Submit content (no approval), manage all submissions, manage moderators & users, reset passwords, view revision history |
-| **Moderator** | Submit content (no approval), approve/reject/edit user submissions, view revision history |
-| **User** | Submit content (requires moderator/admin approval), view revision history |
+| **Moderator** | Submit content (no approval), approve/reject/edit user submissions, view revision history, pin/lock discussion threads |
+| **User** | Submit content (requires moderator/admin approval), view revision history, create discussions, post comments |
 | **Anonymous** | Submit content (requires approval), IP address recorded, view revision history |
 
 > Deleting a user/moderator does **not** delete their contributed content.
@@ -70,6 +70,19 @@ Modular information blocks within a listing (e.g., description, logo, address, t
 /people/new
 /company/hostgator/edit
 /company/hostgator/revisions
+/compare?items=company:hostgator,company:bluehost
+/discussions
+/discussions/new
+/discussions/{id}
+/graph
+/api-docs
+/api/v1/listings
+/api/v1/listings/:category/:slug
+/api/v1/categories
+/api/v1/search?q=query
+/api/v1/graph
+/api/v1/embed/:category/:slug
+/api/v1/oembed?url=
 ```
 
 ---
@@ -78,24 +91,25 @@ Modular information blocks within a listing (e.g., description, logo, address, t
 
 ### Companies & Domain Registrars
 
-**Left sidebar:** Logo, General Information, Offices, People, Data Centers, Products, *Service Providers (deferred)*
-**Body:** Description, Screenshots, Milestones, Coupons, Sources
+**Left sidebar:** Logo, General Information, Offices, People, Data Centers, Products, Control Panels, *Service Providers (deferred)*
+**Body:** Description, Hosting Info, Screenshots, Milestones, Coupons, IP Ranges, Discussions, Sources
 
 Additional per-listing actions:
 - Edit this page → `/company/{slug}/edit`
 - Revision History → `/company/{slug}/revisions`
+- Add to Compare (up to 3 listings)
 - Subscribe to RSS feed for listing edits (only admin-approved edits)
 - Widget embed code (compact "business card" for embedding on external sites)
 
 ### Data Centers
 
-**Left sidebar:** Logo, General Information, Offices, Data Center Locations, People, Products
-**Body:** Description, Screenshots, Milestones, Network Architecture, Sources
+**Left sidebar:** Logo, General Information, Offices, Data Center Locations, People, Products, Control Panels
+**Body:** Description, Hosting Info, Screenshots, Milestones, IP Ranges, Network Architecture, Discussions, Sources
 
 ### People
 
 **Left sidebar:** Photo, General Information, Degrees, Companies, Interests
-**Body:** Description, Milestones, Sources
+**Body:** Description, Milestones, Discussions, Sources
 
 ---
 
@@ -125,6 +139,9 @@ Additional per-listing actions:
 | Coupons | ✅ Implemented |
 | External Links | ✅ Implemented |
 | Sources | ✅ Implemented |
+| Control Panels | ✅ Implemented |
+| Hosting Info (ASN, Uptime, Green Energy) | ✅ Implemented |
+| IP Ranges | ✅ Implemented |
 | *Service Providers* | 🔮 Deferred |
 
 ### Data Center
@@ -151,6 +168,9 @@ Additional per-listing actions:
 | Recent News | ✅ Implemented |
 | External Links | ✅ Implemented |
 | Sources | ✅ Implemented |
+| Control Panels | ✅ Implemented |
+| Hosting Info (ASN, Uptime, Green Energy) | ✅ Implemented |
+| IP Ranges | ✅ Implemented |
 
 ### Domain Name Registrar
 
@@ -175,6 +195,9 @@ Additional per-listing actions:
 | Coupons | ✅ Implemented |
 | External Links | ✅ Implemented |
 | Sources | ✅ Implemented |
+| Control Panels | ✅ Implemented |
+| Hosting Info (ASN, Uptime, Green Energy) | ✅ Implemented |
+| IP Ranges | ✅ Implemented |
 | *Service Providers* | 🔮 Deferred |
 
 ### People
@@ -352,6 +375,28 @@ Text + images that define network architecture / map of service. Combines descri
 
 > **Current implementation:** Has `code`, `discount`, `expiresAt`, `votesYes`, `votesNo` fields (V2.0 schema).
 
+### Control Panels (Companies, Data Centers & Registrars)
+- Name of control panel (e.g., cPanel, Plesk, DirectAdmin)
+- Version (optional)
+- Is Default (boolean) — marks the primary/default panel
+
+> **Implemented.** Database table: `listingControlPanels`. Displayed on listing pages with version info and default indicator.
+
+### Hosting Info (Companies, Data Centers & Registrars)
+- ASN (Autonomous System Number)
+- Uptime Guarantee (percentage)
+- Green Energy Certified (boolean)
+- Green Energy Details (text, shown when certified)
+
+> **Implemented.** Fields stored on the listing record. Displayed as a grid on listing pages.
+
+### IP Ranges (Companies, Data Centers & Registrars)
+- Type: IPv4 or IPv6
+- CIDR notation (e.g., `192.168.0.0/24`)
+- Description (optional)
+
+> **Implemented.** Database table: `listingIpRanges`. Supports both IPv4 and IPv6 ranges.
+
 ### Degrees (People only)
 - Institution
 - Subject(s)
@@ -404,11 +449,97 @@ Feed of news headlines relevant to the listing.
 - Auto-slug generation from name
 - Role-based approval: admin/moderator submissions auto-approved; user/anonymous submissions require approval
 - **Edit flow:** user/anonymous edits create a pending revision (listing stays live); admin/moderator edits apply immediately with widget changes (offices, products)
-- Widget editors: OfficesEditor (dynamic add/remove offices), ProductsEditor (category-specific checkbox grid) — hidden for `person` category
+- Widget editors: OfficesEditor (dynamic add/remove offices), ProductsEditor (category-specific checkbox grid), ListEditor (generic list widget editor) — hidden for `person` category where not applicable
 
 ### Listing Cards (Embeddable)
 - Compact "business card" style embed for any listing
 - Can be inserted into external pages (iframe or embed code)
+- Available via `/api/v1/embed/:category/:slug`
+- oEmbed support at `/api/v1/oembed?url=`
+
+### Community Discussions
+- Threaded discussions linked to specific listings or site-wide
+- Nested comments with replies
+- Moderator tools: pin threads, lock threads, delete threads/comments
+- Discussion stats on user dashboard (threads created, comments posted, replies received)
+- Listing pages show associated discussion threads
+- Routes: `/discussions`, `/discussions/new`, `/discussions/{id}`
+- Database tables: `discussionThreads`, `discussionComments`
+
+### Listing Comparison
+- Side-by-side comparison of up to 3 listings from the same category
+- Compare button on listing cards and listing pages
+- Persistent compare cart (localStorage-backed)
+- Comparison table shows: key stats, sustainability, products, offices, funding, control panels
+- URL-based: `/compare?items=category:slug,category:slug`
+
+### Relationship Graph
+- Interactive force-directed graph visualization
+- Shows connections between companies, data centers, registrars, and people
+- Node size reflects connection count
+- Filterable by category, searchable by name
+- Edge types: person links, datacenter links, partner links
+- Color-coded by category (blue/green/amber/purple)
+- Route: `/graph`
+
+### Notification System
+- Real-time notifications for user interactions
+- Notification types: thread replies, comment replies, listing approved/rejected, revision approved/rejected, listing edited, listing discussion started
+- Unread count badge on dashboard notification bell
+- Mark as read (individual or all)
+- Database table: `notifications`
+- API endpoint: `GET /api/notifications`
+
+### Public REST API (v1)
+- Full read-only API for external access to the BASE database
+- No authentication required
+- Rate limited: 60 requests per minute per IP
+- CORS enabled (all origins)
+- Standardized JSON response format with pagination metadata
+- Endpoints:
+  - `GET /api/v1/listings` — list approved listings (category/pagination filters)
+  - `GET /api/v1/listings/:category/:slug` — single listing with all widgets
+  - `GET /api/v1/categories` — category counts
+  - `GET /api/v1/search?q=query` — search listings
+  - `GET /api/v1/graph` — relationship graph data
+  - `GET /api/v1/embed/:category/:slug` — embeddable HTML card
+  - `GET /api/v1/oembed?url=` — oEmbed endpoint
+- Interactive documentation at `/api-docs`
+
+---
+
+## Database Schema
+
+### Core Tables
+- `users` — user accounts with roles (admin, moderator, user)
+- `listings` — all listing profiles across categories
+- `revisions` — revision history with before/after JSONB and approval tracking
+
+### Widget Tables
+- `listingOffices` — office locations with HQ designation
+- `listingProducts` — products/services offered
+- `listingPeople` — associated people with title and dates
+- `listingDatacenterLinks` — company ↔ datacenter associations
+- `listingPartners` — partner relationships
+- `listingFunding` — funding rounds
+- `listingAcquisitions` — acquisitions
+- `listingExits` — exit events
+- `listingMilestones` — timeline milestones
+- `listingScreenshots` — screenshot images
+- `listingVideos` — video embeds
+- `listingTags` — keyword tags
+- `listingExternalLinks` — external URLs
+- `listingSources` — reference sources
+- `listingRecentNews` — news feed items
+- `listingCoupons` — coupon codes with voting
+- `listingDegrees` — degrees (people only)
+- `listingControlPanels` — supported control panels with version info
+- `listingIpRanges` — IPv4/IPv6 CIDR ranges
+
+### Community Tables
+- `discussionThreads` — discussion threads (title, body, pinned, locked, listing reference)
+- `discussionComments` — comments with nested reply support
+- `notifications` — user notification inbox
 
 ---
 
@@ -434,7 +565,6 @@ External data feeds from sites like Quantcast, Compete, WebHosting.info, SEMRush
 - Social Media feed results
 - Listing view counts
 - Honor Badges (auto-assigned milestones, e.g., high-traffic listing)
-- API access
 - Events category
 - Software category
 - RSS feeds per listing (admin-approved edits only)
@@ -444,6 +574,7 @@ External data feeds from sites like Quantcast, Compete, WebHosting.info, SEMRush
 ## Removed Features
 
 - **Competitors widget** — removed from all categories
+- **API access** — moved from future to implemented (v1 now live)
 
 ---
 
@@ -458,4 +589,5 @@ External data feeds from sites like Quantcast, Compete, WebHosting.info, SEMRush
 - **Notifications**: Sonner
 - **Icons**: lucide-react
 - **Theme**: next-themes (light/dark mode with dark default)
-- **Font**: DM Sans (via next/font/google)
+- **Font**: DM Sans (via next/font/google) + Geist Mono (monospace)
+- **Smooth Scroll**: Lenis

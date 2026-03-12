@@ -5,10 +5,15 @@ A community-driven database for the web hosting industry, inspired by Crunchbase
 ## Features
 
 - **Four Categories** — Companies, Data Centers, Domain Registrars, and People
-- **Modular Widget System** — Listing pages built from composable widgets (overview, offices, products, milestones, screenshots, and more)
+- **Modular Widget System** — Listing pages built from composable widgets (overview, offices, products, milestones, screenshots, control panels, hosting info, IP ranges, and more)
 - **Live Search** — Instant auto-complete search with Cmd+K shortcut
 - **Pending Revision System** — User edits create pending revisions for moderator approval; listings stay live until approved
 - **Revision History** — Full edit history with before/after diffs for every listing
+- **Community Discussions** — Threaded discussions per listing or site-wide, with nested comments, pinning, and locking
+- **Listing Comparison** — Side-by-side comparison of up to 3 listings from the same category
+- **Relationship Graph** — Interactive force-directed graph showing connections between companies, data centers, registrars, and people
+- **Public REST API** — Full API (v1) with rate limiting, search, oEmbed, and embeddable listing cards
+- **Notifications** — Real-time notification system for thread replies, revision decisions, and listing approvals
 - **Role-Based Access** — Administrator, Moderator, User, and Anonymous roles
 - **No Account Required** — Anyone can submit new listings or suggest edits
 - **Duplicate Prevention** — Automatic duplicate checking on submission
@@ -86,21 +91,40 @@ src/
 ├── app/
 │   ├── (auth)/          # Login & register pages
 │   ├── (dashboard)/     # Protected admin/moderator dashboard
-│   ├── (public)/        # Public browse & listing pages
-│   └── api/             # Auth & search API routes
+│   ├── (public)/        # Public browse, listing, compare, discussions, graph pages
+│   └── api/             # Auth, search, notifications, and public API v1
 ├── components/
-│   ├── dashboard/       # Dashboard UI & moderation
+│   ├── compare/         # Listing comparison (provider, button, bar, table)
+│   ├── dashboard/       # Dashboard UI, moderation, notification bell
+│   ├── discussions/     # Thread list, detail, comments, moderation actions
+│   ├── graph/           # Force-directed relationship graph visualization
 │   ├── home/            # Landing page sections
-│   ├── public/          # Public header, footer, widgets
+│   ├── public/          # Public header, footer, widgets (23 widget components)
 │   ├── search/          # Search bar & results
-│   ├── submission/      # Listing submission forms
+│   ├── submission/      # Listing submission forms & widget editors
 │   └── ui/              # shadcn primitives
-├── hooks/               # Custom React hooks
 ├── lib/
+│   ├── api/             # Public API v1 helpers (rate limiting, middleware, queries)
 │   ├── db/              # Drizzle schema & client
-│   └── validations/     # Zod schemas
-└── types/               # TypeScript type definitions
+│   └── validations/     # Zod schemas (listings, widgets, discussions)
+└── types/               # TypeScript type definitions (listings, discussions, graph)
 ```
+
+## API
+
+BASE provides a public REST API at `/api/v1`. Rate limited to 60 requests per minute per IP.
+
+| Endpoint | Description |
+|---|---|
+| `GET /api/v1/listings` | List approved listings (with category/pagination filters) |
+| `GET /api/v1/listings/:category/:slug` | Get single listing with all widgets |
+| `GET /api/v1/categories` | Get category counts |
+| `GET /api/v1/search?q=query` | Search listings by name |
+| `GET /api/v1/graph` | Relationship graph data (nodes + edges) |
+| `GET /api/v1/embed/:category/:slug` | Embeddable HTML card |
+| `GET /api/v1/oembed?url=` | oEmbed endpoint for rich previews |
+
+Full documentation available at `/api-docs` when the app is running.
 
 ## License
 
