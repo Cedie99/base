@@ -32,6 +32,8 @@ import {
   type SourceEntry, emptySource, SOURCE_FIELDS,
   type CouponEntry, emptyCoupon, COUPON_FIELDS,
   type DegreeEntry, emptyDegree, DEGREE_FIELDS,
+  type IpRangeEntry, emptyIpRange, IP_RANGE_FIELDS,
+  type ControlPanelEntry, emptyControlPanel, CONTROL_PANEL_FIELDS,
 } from "./widget-configs";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -56,6 +58,9 @@ import {
   Newspaper,
   ExternalLink,
   BookOpen,
+  Network,
+  Shield,
+  Leaf,
 } from "lucide-react";
 
 const companyStatuses = [
@@ -225,6 +230,16 @@ export function SubmissionForm({
     return listing.personDegrees.map((d) => ({ institution: d.institution, subject: d.subject ?? "", degreeType: d.degreeType ?? "", graduationYear: d.graduationYear ?? "" }));
   });
 
+  const [ipRanges, setIpRanges] = useState<IpRangeEntry[]>(() => {
+    if (!listing?.ipRanges) return [];
+    return listing.ipRanges.map((r) => ({ type: r.type, cidr: r.cidr, description: r.description ?? "" }));
+  });
+
+  const [controlPanels, setControlPanels] = useState<ControlPanelEntry[]>(() => {
+    if (!listing?.controlPanels) return [];
+    return listing.controlPanels.map((c) => ({ name: c.name, version: c.version ?? "", isDefault: c.isDefault }));
+  });
+
   useEffect(() => {
     if (autoSlug && name) {
       setSlug(generateSlug(name));
@@ -282,6 +297,12 @@ export function SubmissionForm({
         )}
         {isCompany && (
           <input type="hidden" name="__datacenterLinks" value={JSON.stringify(datacenterLinks.filter((d) => d.datacenterName.trim()))} />
+        )}
+        {(isCompany || isDatacenter) && (
+          <>
+            <input type="hidden" name="__ipRanges" value={JSON.stringify(ipRanges.filter((r) => r.cidr.trim()))} />
+            <input type="hidden" name="__controlPanels" value={JSON.stringify(controlPanels.filter((c) => c.name.trim()))} />
+          </>
         )}
         {(isCompany || isRegistrar) && (
           <input type="hidden" name="__coupons" value={JSON.stringify(coupons.filter((c) => c.code.trim()))} />
@@ -427,6 +448,38 @@ export function SubmissionForm({
                 <div className="space-y-2">
                   <Label htmlFor="stockTicker">Stock Ticker</Label>
                   <Input id="stockTicker" name="stockTicker" placeholder="e.g. GOOG" defaultValue={listing?.stockTicker ?? ""} />
+                </div>
+              )}
+              {(isCompany || isDatacenter) && (
+                <div className="space-y-2">
+                  <Label htmlFor="asnNumber">ASN Number</Label>
+                  <Input id="asnNumber" name="asnNumber" placeholder="e.g. AS13335" defaultValue={listing?.asnNumber ?? ""} />
+                </div>
+              )}
+              {(isCompany || isDatacenter) && (
+                <div className="space-y-2">
+                  <Label htmlFor="uptimeGuarantee">Uptime Guarantee</Label>
+                  <Input id="uptimeGuarantee" name="uptimeGuarantee" placeholder="e.g. 99.99%" defaultValue={listing?.uptimeGuarantee ?? ""} />
+                </div>
+              )}
+              {(isCompany || isDatacenter) && (
+                <div className="space-y-2 sm:col-span-2">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="greenEnergyCertified"
+                      name="greenEnergyCertified"
+                      defaultChecked={listing?.greenEnergyCertified ?? false}
+                      className="h-4 w-4 rounded border-input"
+                    />
+                    <Label htmlFor="greenEnergyCertified">Green Energy Certified</Label>
+                  </div>
+                  <Input
+                    id="greenEnergyDetails"
+                    name="greenEnergyDetails"
+                    placeholder="e.g. 100% renewable, EPA Green Power Partner"
+                    defaultValue={listing?.greenEnergyDetails ?? ""}
+                  />
                 </div>
               )}
             </div>
@@ -655,6 +708,26 @@ export function SubmissionForm({
               />
             </div>
           )}
+
+          {/* IP Ranges & Control Panels (company + datacenter) */}
+          {(isCompany || isDatacenter) && (
+            <>
+              <div>
+                <ListEditor<IpRangeEntry>
+                  title="IP Ranges" singularLabel="IP Range" fields={IP_RANGE_FIELDS}
+                  items={ipRanges} onChange={setIpRanges} emptyItem={emptyIpRange}
+                  icon={Network} description="IP address ranges owned by this organization."
+                />
+              </div>
+              <div>
+                <ListEditor<ControlPanelEntry>
+                  title="Control Panels" singularLabel="Panel" fields={CONTROL_PANEL_FIELDS}
+                  items={controlPanels} onChange={setControlPanels} emptyItem={emptyControlPanel}
+                  icon={Shield} description="Hosting control panels supported."
+                />
+              </div>
+            </>
+          )}
         </>
       )}
 
@@ -720,11 +793,11 @@ export function SubmissionForm({
 
       {/* ===== Submit — full width ===== */}
       <div className="lg:col-span-2 flex justify-end gap-3">
-        <Button type="submit" disabled={pending}>
-          {pending ? "Submitting..." : isEdit ? "Submit Edit" : "Submit"}
-        </Button>
         <Button type="button" variant="outline" onClick={() => router.back()}>
           Cancel
+        </Button>
+        <Button type="submit" disabled={pending}>
+          {pending ? "Submitting..." : isEdit ? "Submit Edit" : "Submit"}
         </Button>
       </div>
     </form>

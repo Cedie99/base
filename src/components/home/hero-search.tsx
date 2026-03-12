@@ -1,7 +1,8 @@
 "use client";
 
 import { SearchBar } from "@/components/search/search-bar";
-import { Database, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
+import { BaseLogo } from "@/components/base-logo";
 import { TypewriterEffect } from "@/components/ui/typewriter-effect";
 import { Sparkles } from "@/components/ui/sparkles";
 
@@ -20,11 +21,7 @@ export function HeroSearch() {
       <div className="pointer-events-none absolute bottom-1/4 left-1/2 h-[350px] w-[350px] -translate-x-1/2 rounded-full bg-emerald-300/20 blur-3xl dark:bg-emerald-600/10" />
 
       <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center gap-8 px-4 text-center">
-        <div className="animate-fade-in-up">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-neutral-200 bg-white shadow-md dark:border-neutral-800 dark:bg-neutral-900/80 dark:shadow-neutral-900/50">
-            <Database className="h-7 w-7 text-neutral-600 dark:text-neutral-300" />
-          </div>
-        </div>
+        
 
         <Sparkles
           className="animate-fade-in-up stagger-1"

@@ -21,6 +21,8 @@ import {
   listingExternalLinks,
   listingSources,
   listingCoupons,
+  listingIpRanges,
+  listingControlPanels,
 } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -29,6 +31,7 @@ import { createListingSchema } from "@/lib/validations/listing";
 import { generateSlug } from "@/lib/utils/slug";
 import { checkSlugExists, getListingById } from "@/lib/listings.queries";
 import { createRevision } from "@/lib/revisions";
+import { createNotification } from "@/lib/notifications.helpers";
 import type { ActionState } from "@/lib/listings.actions";
 
 async function getClientIp(): Promise<string> {
@@ -138,6 +141,18 @@ interface CouponInput {
   code: string;
   discount: string;
   expiresAt?: string;
+}
+
+interface IpRangeInput {
+  type: string;
+  cidr: string;
+  description?: string;
+}
+
+interface ControlPanelInput {
+  name: string;
+  version?: string;
+  isDefault?: boolean;
 }
 
 function parseWidgetJson<T>(formData: FormData, key: string): T[] {
@@ -347,6 +362,30 @@ async function insertAllWidgets(listingId: string, formData: FormData) {
       }))
     );
   }
+
+  const ipRanges = parseWidgetJson<IpRangeInput>(formData, "__ipRanges");
+  if (ipRanges.length > 0) {
+    await db.insert(listingIpRanges).values(
+      ipRanges.map((r) => ({
+        listingId,
+        type: r.type,
+        cidr: r.cidr,
+        description: r.description || null,
+      }))
+    );
+  }
+
+  const controlPanels = parseWidgetJson<ControlPanelInput>(formData, "__controlPanels");
+  if (controlPanels.length > 0) {
+    await db.insert(listingControlPanels).values(
+      controlPanels.map((c) => ({
+        listingId,
+        name: c.name,
+        version: c.version || null,
+        isDefault: c.isDefault ?? false,
+      }))
+    );
+  }
 }
 
 function parseAllWidgets(formData: FormData) {
@@ -368,6 +407,8 @@ function parseAllWidgets(formData: FormData) {
     externalLinks: parseWidgetJson<ExternalLinkInput>(formData, "__externalLinks"),
     sources: parseWidgetJson<SourceInput>(formData, "__sources"),
     coupons: parseWidgetJson<CouponInput>(formData, "__coupons"),
+    ipRanges: parseWidgetJson<IpRangeInput>(formData, "__ipRanges"),
+    controlPanels: parseWidgetJson<ControlPanelInput>(formData, "__controlPanels"),
   };
 }
 
@@ -390,6 +431,8 @@ async function deleteAllWidgets(listingId: string) {
     db.delete(listingExternalLinks).where(eq(listingExternalLinks.listingId, listingId)),
     db.delete(listingSources).where(eq(listingSources.listingId, listingId)),
     db.delete(listingCoupons).where(eq(listingCoupons.listingId, listingId)),
+    db.delete(listingIpRanges).where(eq(listingIpRanges.listingId, listingId)),
+    db.delete(listingControlPanels).where(eq(listingControlPanels.listingId, listingId)),
   ]);
 }
 
@@ -441,6 +484,10 @@ export async function submitListing(
       totalSquareFootage: data.totalSquareFootage || null,
       blogFeedUrl: data.blogFeedUrl || null,
       stockTicker: data.stockTicker || null,
+      asnNumber: data.asnNumber || null,
+      greenEnergyCertified: data.greenEnergyCertified ?? false,
+      greenEnergyDetails: data.greenEnergyDetails || null,
+      uptimeGuarantee: data.uptimeGuarantee || null,
       companyStatus: data.companyStatus || null,
       approvalStatus,
       createdById: user?.id ?? null,
@@ -484,7 +531,7 @@ export async function submitListingEdit(
     "foundingDate", "firstName", "lastName", "homepageUrl", "blogUrl",
     "blogFeedUrl", "twitterUsername", "linkedinUrl", "facebookUrl", "instagramUrl",
     "tiktokUrl", "birthplace", "birthdate", "photoUrl", "totalSquareFootage",
-    "stockTicker",
+    "stockTicker", "asnNumber", "greenEnergyDetails", "uptimeGuarantee",
   ];
 
   for (const field of fields) {
@@ -510,6 +557,9 @@ export async function submitListingEdit(
   }
   if (cleaned.companyStatus !== undefined) {
     updateData.companyStatus = (cleaned.companyStatus as string) || null;
+  }
+  if (cleaned.greenEnergyCertified !== undefined) {
+    updateData.greenEnergyCertified = cleaned.greenEnergyCertified === "on" || cleaned.greenEnergyCertified === "true" || cleaned.greenEnergyCertified === true;
   }
 
   // Parse all widget data
@@ -546,6 +596,8 @@ export async function submitListingEdit(
       externalLinks: existing.externalLinks,
       sources: existing.sources,
       coupons: existing.coupons,
+      ipRanges: existing.ipRanges,
+      controlPanels: existing.controlPanels,
     },
   };
 
@@ -580,6 +632,16 @@ export async function submitListingEdit(
       before: beforeSnapshot,
       after: afterSnapshot,
       approvalStatus: "pending",
+    });
+  }
+
+  // Notify listing creator that someone edited their listing
+  if (existing.createdById && user?.id) {
+    await createNotification({
+      userId: existing.createdById,
+      type: "listing_edited",
+      triggeredById: user.id,
+      listingId: id,
     });
   }
 

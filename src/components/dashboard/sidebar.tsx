@@ -2,6 +2,7 @@ import Link from "next/link";
 import { LayoutDashboard, Settings, List, Shield, Users } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { auth } from "@/lib/auth";
+import { BaseLogo } from "@/components/base-logo";
 
 interface NavItem {
   href: string;
@@ -28,8 +29,11 @@ export async function Sidebar() {
 
   return (
     <aside className="sticky top-0 flex h-screen w-64 flex-col border-r bg-card">
-      <div className="flex h-14 items-center px-6 font-semibold">
-        <Link href="/">BASE</Link>
+      <div className="flex h-14 items-center gap-2.5 px-6 font-semibold">
+        <Link href="/" className="flex items-center gap-2.5">
+          <BaseLogo size={24} />
+          <span>BASE</span>
+        </Link>
       </div>
       <Separator />
       <nav className="flex-1 space-y-1 p-4">

@@ -140,6 +140,25 @@ export const degreeSchema = z.object({
   graduationYear: z.string().optional(),
 });
 
+export const ipRangeSchema = z.object({
+  id: z.string().optional(),
+  listingId: z.string().min(1),
+  type: z.enum(["ipv4", "ipv6"]),
+  cidr: z.string().min(1, "CIDR is required"),
+  description: z.string().optional(),
+});
+
+export const controlPanelSchema = z.object({
+  id: z.string().optional(),
+  listingId: z.string().min(1),
+  name: z.string().min(1, "Name is required"),
+  version: z.string().optional(),
+  isDefault: z.boolean().default(false),
+});
+
+export type IpRangeInput = z.infer<typeof ipRangeSchema>;
+export type ControlPanelInput = z.infer<typeof controlPanelSchema>;
+
 export type OfficeInput = z.infer<typeof officeSchema>;
 export type PersonLinkInput = z.infer<typeof personLinkSchema>;
 export type ProductInput = z.infer<typeof productSchema>;

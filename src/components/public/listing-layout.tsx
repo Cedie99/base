@@ -20,7 +20,12 @@ import { CouponsWidget } from "./widgets/coupons";
 import { ExternalLinksWidget } from "./widgets/external-links";
 import { SourcesWidget } from "./widgets/sources";
 import { DegreesWidget } from "./widgets/degrees";
+import { HostingInfoWidget } from "./widgets/hosting-info";
+import { IpRangesWidget } from "./widgets/ip-ranges";
+import { ControlPanelsWidget } from "./widgets/control-panels";
 import { getCouponVotes } from "@/lib/widgets.actions";
+import { getListingThreads } from "@/lib/discussions.queries";
+import { ListingDiscussions } from "./listing-discussions";
 
 export async function ListingLayout({ listing }: { listing: ListingWithWidgets }) {
   const isPerson = listing.category === "person";
@@ -28,10 +33,13 @@ export async function ListingLayout({ listing }: { listing: ListingWithWidgets }
     listing.category === "company" || listing.category === "registrar";
   const showDatacenters = listing.category === "company";
 
-  let userVotes: Record<string, "yes" | "no"> = {};
-  if (showCoupons && listing.coupons.length > 0) {
-    userVotes = await getCouponVotes(listing.coupons.map((c) => c.id));
-  }
+  const [userVotesResult, listingThreads] = await Promise.all([
+    showCoupons && listing.coupons.length > 0
+      ? getCouponVotes(listing.coupons.map((c) => c.id))
+      : Promise.resolve({} as Record<string, "yes" | "no">),
+    getListingThreads(listing.id),
+  ]);
+  const userVotes = userVotesResult;
 
   return (
     <div className="space-y-8">
@@ -41,9 +49,12 @@ export async function ListingLayout({ listing }: { listing: ListingWithWidgets }
         <div className="space-y-8 lg:col-span-2">
           <OverviewWidget overview={listing.overview} />
           {!isPerson && <GeneralInfoWidget listing={listing} />}
+          {!isPerson && <HostingInfoWidget listing={listing} />}
           {isPerson && <PersonInfoWidget listing={listing} />}
           <MilestonesWidget milestones={listing.milestones} />
           {!isPerson && <ProductsWidget products={listing.products} />}
+          {!isPerson && <ControlPanelsWidget controlPanels={listing.controlPanels} />}
+          {(listing.category === "company" || listing.category === "datacenter") && <IpRangesWidget ipRanges={listing.ipRanges} />}
           {!isPerson && <OfficesWidget offices={listing.offices} />}
           {!isPerson && <PeopleWidget people={listing.people} />}
           <VideosWidget videos={listing.videos} />
@@ -57,6 +68,10 @@ export async function ListingLayout({ listing }: { listing: ListingWithWidgets }
           )}
           <NewsWidget news={listing.news} />
           {isPerson && <DegreesWidget degrees={listing.personDegrees} />}
+          <ListingDiscussions
+            listingId={listing.id}
+            threads={listingThreads}
+          />
         </div>
 
         <div className="space-y-6 lg:sticky lg:top-20 lg:self-start">

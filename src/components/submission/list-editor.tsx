@@ -96,12 +96,24 @@ export function ListEditor<T extends object>({
                   {field.label}
                   {field.required ? " *" : ""}
                 </Label>
-                <Input
-                  value={(item as Record<string, string>)[field.key] ?? ""}
-                  onChange={(e) => updateItem(index, field.key, e.target.value)}
-                  placeholder={field.placeholder}
-                  type={field.type ?? "text"}
-                />
+                {field.type === "select" && field.options ? (
+                  <select
+                    value={(item as Record<string, string>)[field.key] ?? ""}
+                    onChange={(e) => updateItem(index, field.key, e.target.value)}
+                    className="flex h-9 w-full rounded-lg border border-input bg-background px-3 py-1 text-sm"
+                  >
+                    {field.options.map((opt) => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <Input
+                    value={(item as Record<string, string>)[field.key] ?? ""}
+                    onChange={(e) => updateItem(index, field.key, e.target.value)}
+                    placeholder={field.placeholder}
+                    type={field.type ?? "text"}
+                  />
+                )}
               </div>
             ))}
           </div>

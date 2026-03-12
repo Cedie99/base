@@ -17,6 +17,8 @@ import type {
   listingSources,
   listingCoupons,
   personDegrees,
+  listingIpRanges,
+  listingControlPanels,
   revisions,
 } from "@/lib/db/schema";
 
@@ -40,6 +42,8 @@ export type ListingExternalLink = typeof listingExternalLinks.$inferSelect;
 export type ListingSource = typeof listingSources.$inferSelect;
 export type ListingCoupon = typeof listingCoupons.$inferSelect;
 export type PersonDegree = typeof personDegrees.$inferSelect;
+export type ListingIpRange = typeof listingIpRanges.$inferSelect;
+export type ListingControlPanel = typeof listingControlPanels.$inferSelect;
 export type Revision = typeof revisions.$inferSelect;
 
 export interface RevisionWithRelations extends Revision {
@@ -82,6 +86,8 @@ export interface ListingWithWidgets extends Listing {
   sources: ListingSource[];
   coupons: ListingCoupon[];
   personDegrees: PersonDegree[];
+  ipRanges: ListingIpRange[];
+  controlPanels: ListingControlPanel[];
 }
 
 export const CATEGORY_LABELS: Record<Category, string> = {
