@@ -24,6 +24,8 @@ export async function getListingById(id: string) {
       sources: true,
       coupons: true,
       personDegrees: true,
+      ipRanges: true,
+      controlPanels: true,
     },
   });
 }
@@ -49,6 +51,8 @@ export async function getListingBySlug(category: Category, slug: string) {
       sources: true,
       coupons: true,
       personDegrees: true,
+      ipRanges: true,
+      controlPanels: true,
     },
   });
 }
@@ -78,6 +82,8 @@ export async function getPublicListingBySlug(category: Category, slug: string) {
       sources: true,
       coupons: true,
       personDegrees: true,
+      ipRanges: true,
+      controlPanels: true,
     },
   });
 }

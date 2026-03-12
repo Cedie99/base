@@ -48,6 +48,10 @@ export const createListingSchema = z.object({
     .or(z.literal("")),
   totalSquareFootage: z.string().optional(),
   stockTicker: z.string().optional(),
+  asnNumber: z.string().optional(),
+  greenEnergyCertified: z.preprocess((v) => v === "on" || v === "true" || v === true, z.boolean().optional()),
+  greenEnergyDetails: z.string().optional(),
+  uptimeGuarantee: z.string().optional(),
 
   // People-specific
   firstName: z.string().optional(),

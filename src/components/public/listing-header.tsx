@@ -4,6 +4,7 @@ import type { ListingWithWidgets } from "@/types/listings";
 import { CATEGORY_SINGULAR, CATEGORY_URL_PREFIX, CATEGORY_LABELS, CATEGORY_PLURAL_URL } from "@/types/listings";
 import { getCategoryColors, categoryIcons } from "@/lib/utils/category-colors";
 import { EditListingButton } from "@/components/submission/edit-listing-button";
+import { CompareButton } from "@/components/compare/compare-button";
 
 const statusLabels: Record<string, string> = {
   privately_held: "Privately Held",
@@ -90,6 +91,14 @@ export function ListingHeader({ listing }: { listing: ListingWithWidgets }) {
           <History className="h-3.5 w-3.5" />
           Revision History
         </Link>
+        <CompareButton
+          item={{
+            category: listing.category,
+            slug: listing.slug,
+            name: listing.name,
+            logoUrl: listing.logoUrl,
+          }}
+        />
       </div>
     </div>
   );

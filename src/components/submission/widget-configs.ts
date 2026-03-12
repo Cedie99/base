@@ -4,7 +4,8 @@ export interface FieldConfig {
   placeholder?: string;
   required?: boolean;
   colSpan?: 2;
-  type?: "url" | "date";
+  type?: "url" | "date" | "select";
+  options?: { value: string; label: string }[];
 }
 
 // ── People ──────────────────────────────────────────────────
@@ -239,4 +240,35 @@ export const DEGREE_FIELDS: FieldConfig[] = [
   { key: "subject", label: "Subject", placeholder: "e.g. Computer Science" },
   { key: "degreeType", label: "Degree Type", placeholder: "e.g. B.S., M.S., Ph.D." },
   { key: "graduationYear", label: "Graduation Year", placeholder: "e.g. 2010" },
+];
+
+// ── IP Ranges ──────────────────────────────────────────────
+
+export interface IpRangeEntry {
+  type: string;
+  cidr: string;
+  description: string;
+}
+
+export const emptyIpRange: IpRangeEntry = { type: "ipv4", cidr: "", description: "" };
+
+export const IP_RANGE_FIELDS: FieldConfig[] = [
+  { key: "type", label: "Type", required: true, type: "select", options: [{ value: "ipv4", label: "IPv4" }, { value: "ipv6", label: "IPv6" }] },
+  { key: "cidr", label: "CIDR", required: true, placeholder: "e.g. 104.16.0.0/12" },
+  { key: "description", label: "Description", placeholder: "e.g. Primary range", colSpan: 2 },
+];
+
+// ── Control Panels ─────────────────────────────────────────
+
+export interface ControlPanelEntry {
+  name: string;
+  version: string;
+  isDefault: boolean;
+}
+
+export const emptyControlPanel: ControlPanelEntry = { name: "", version: "", isDefault: false };
+
+export const CONTROL_PANEL_FIELDS: FieldConfig[] = [
+  { key: "name", label: "Panel Name", required: true, placeholder: "e.g. cPanel" },
+  { key: "version", label: "Version", placeholder: "e.g. 11.110" },
 ];

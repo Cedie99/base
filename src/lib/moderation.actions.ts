@@ -25,15 +25,32 @@ import {
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { requireModerator } from "@/lib/auth.helpers";
+import { createNotification } from "@/lib/notifications.helpers";
 import type { ActionState } from "@/lib/listings.actions";
 
 export async function approveListing(id: string): Promise<ActionState> {
   try {
-    await requireModerator();
+    const user = await requireModerator();
+
+    const listing = await db.query.listings.findFirst({
+      where: eq(listings.id, id),
+      columns: { createdById: true },
+    });
+
     await db
       .update(listings)
       .set({ approvalStatus: "approved", updatedAt: new Date() })
       .where(eq(listings.id, id));
+
+    if (listing?.createdById) {
+      await createNotification({
+        userId: listing.createdById,
+        type: "listing_approved",
+        triggeredById: user.id,
+        listingId: id,
+      });
+    }
+
     revalidatePath("/dashboard/moderation");
     revalidatePath("/");
     return { success: true };
@@ -45,11 +62,27 @@ export async function approveListing(id: string): Promise<ActionState> {
 
 export async function rejectListing(id: string): Promise<ActionState> {
   try {
-    await requireModerator();
+    const user = await requireModerator();
+
+    const listing = await db.query.listings.findFirst({
+      where: eq(listings.id, id),
+      columns: { createdById: true },
+    });
+
     await db
       .update(listings)
       .set({ approvalStatus: "rejected", updatedAt: new Date() })
       .where(eq(listings.id, id));
+
+    if (listing?.createdById) {
+      await createNotification({
+        userId: listing.createdById,
+        type: "listing_rejected",
+        triggeredById: user.id,
+        listingId: id,
+      });
+    }
+
     revalidatePath("/dashboard/moderation");
     return { success: true };
   } catch (err) {
@@ -314,6 +347,16 @@ export async function approveRevision(revisionId: string): Promise<ActionState> 
       })
       .where(eq(revisions.id, revisionId));
 
+    if (revision.userId) {
+      await createNotification({
+        userId: revision.userId,
+        type: "revision_approved",
+        triggeredById: user.id,
+        listingId: revision.listingId,
+        revisionId: revision.id,
+      });
+    }
+
     revalidatePath("/dashboard/moderation");
     revalidatePath("/");
     return { success: true };
@@ -344,6 +387,16 @@ export async function rejectRevision(revisionId: string): Promise<ActionState> {
         moderatedAt: new Date(),
       })
       .where(eq(revisions.id, revisionId));
+
+    if (revision.userId) {
+      await createNotification({
+        userId: revision.userId,
+        type: "revision_rejected",
+        triggeredById: user.id,
+        listingId: revision.listingId,
+        revisionId: revision.id,
+      });
+    }
 
     revalidatePath("/dashboard/moderation");
     return { success: true };

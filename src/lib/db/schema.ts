@@ -61,6 +61,9 @@ export const usersRelations = relations(users, ({ many }) => ({
   listings: many(listings),
   revisions: many(revisions, { relationName: "revisionAuthor" }),
   moderatedRevisions: many(revisions, { relationName: "revisionModerator" }),
+  discussionThreads: many(discussionThreads),
+  discussionComments: many(discussionComments),
+  notifications: many(notifications),
 }));
 
 // ── Auth tables ────────────────────────────────────────────
@@ -143,6 +146,10 @@ export const listings = pgTable(
     numberOfDatacenters: integer("number_of_datacenters"),
     totalSquareFootage: text("total_square_footage"),
     stockTicker: text("stock_ticker"),
+    asnNumber: text("asn_number"),
+    greenEnergyCertified: boolean("green_energy_certified").default(false),
+    greenEnergyDetails: text("green_energy_details"),
+    uptimeGuarantee: text("uptime_guarantee"),
 
     // People-specific fields
     firstName: text("first_name"),
@@ -197,7 +204,11 @@ export const listingsRelations = relations(listings, ({ one, many }) => ({
   sources: many(listingSources),
   coupons: many(listingCoupons),
   personDegrees: many(personDegrees),
+  ipRanges: many(listingIpRanges),
+  controlPanels: many(listingControlPanels),
   revisions: many(revisions),
+  discussionThreads: many(discussionThreads),
+  notifications: many(notifications),
 }));
 
 // ── Widget Tables ──────────────────────────────────────────
@@ -620,6 +631,46 @@ export const personDegreesRelations = relations(personDegrees, ({ one }) => ({
   }),
 }));
 
+export const listingIpRanges = pgTable("listing_ip_range", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  listingId: text("listing_id")
+    .notNull()
+    .references(() => listings.id, { onDelete: "cascade" }),
+  type: text("type").notNull(), // "ipv4" | "ipv6"
+  cidr: text("cidr").notNull(), // e.g. "104.16.0.0/12"
+  description: text("description"),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+});
+
+export const listingIpRangesRelations = relations(listingIpRanges, ({ one }) => ({
+  listing: one(listings, {
+    fields: [listingIpRanges.listingId],
+    references: [listings.id],
+  }),
+}));
+
+export const listingControlPanels = pgTable("listing_control_panel", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  listingId: text("listing_id")
+    .notNull()
+    .references(() => listings.id, { onDelete: "cascade" }),
+  name: text("name").notNull(), // e.g. "cPanel"
+  version: text("version"),
+  isDefault: boolean("is_default").default(false).notNull(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+});
+
+export const listingControlPanelsRelations = relations(listingControlPanels, ({ one }) => ({
+  listing: one(listings, {
+    fields: [listingControlPanels.listingId],
+    references: [listings.id],
+  }),
+}));
+
 // ── Revisions ──────────────────────────────────────────────
 
 export const revisions = pgTable(
@@ -666,5 +717,161 @@ export const revisionsRelations = relations(revisions, ({ one }) => ({
     fields: [revisions.moderatedById],
     references: [users.id],
     relationName: "revisionModerator",
+  }),
+}));
+
+// ── Discussion Threads ──────────────────────────────────────
+
+export const discussionThreads = pgTable(
+  "discussion_thread",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    title: text("title").notNull(),
+    body: text("body").notNull(),
+    listingId: text("listing_id").references(() => listings.id, {
+      onDelete: "cascade",
+    }),
+    createdById: text("created_by_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    isPinned: boolean("is_pinned").default(false).notNull(),
+    isLocked: boolean("is_locked").default(false).notNull(),
+    commentCount: integer("comment_count").default(0).notNull(),
+    lastActivityAt: timestamp("last_activity_at", { mode: "date" })
+      .defaultNow()
+      .notNull(),
+    createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { mode: "date" }).defaultNow().notNull(),
+  },
+  (table) => [
+    index("discussion_thread_listing_idx").on(table.listingId),
+    index("discussion_thread_created_by_idx").on(table.createdById),
+    index("discussion_thread_last_activity_idx").on(table.lastActivityAt),
+  ]
+);
+
+export const discussionThreadsRelations = relations(
+  discussionThreads,
+  ({ one, many }) => ({
+    listing: one(listings, {
+      fields: [discussionThreads.listingId],
+      references: [listings.id],
+    }),
+    createdBy: one(users, {
+      fields: [discussionThreads.createdById],
+      references: [users.id],
+    }),
+    comments: many(discussionComments),
+  })
+);
+
+// ── Discussion Comments ─────────────────────────────────────
+
+export const discussionComments = pgTable(
+  "discussion_comment",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    threadId: text("thread_id")
+      .notNull()
+      .references(() => discussionThreads.id, { onDelete: "cascade" }),
+    parentCommentId: text("parent_comment_id"),
+    body: text("body").notNull(),
+    createdById: text("created_by_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { mode: "date" }).defaultNow().notNull(),
+  },
+  (table) => [
+    index("discussion_comment_thread_idx").on(table.threadId),
+    index("discussion_comment_parent_idx").on(table.parentCommentId),
+  ]
+);
+
+export const discussionCommentsRelations = relations(
+  discussionComments,
+  ({ one, many }) => ({
+    thread: one(discussionThreads, {
+      fields: [discussionComments.threadId],
+      references: [discussionThreads.id],
+    }),
+    parentComment: one(discussionComments, {
+      fields: [discussionComments.parentCommentId],
+      references: [discussionComments.id],
+      relationName: "commentReplies",
+    }),
+    replies: many(discussionComments, { relationName: "commentReplies" }),
+    createdBy: one(users, {
+      fields: [discussionComments.createdById],
+      references: [users.id],
+    }),
+  })
+);
+
+// ── Notifications ───────────────────────────────────────────
+
+export const notifications = pgTable(
+  "notification",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    type: text("type").notNull(), // "thread_reply" | "comment_reply" | "listing_approved" | "listing_rejected" | "revision_approved" | "revision_rejected" | "listing_edited" | "listing_discussion"
+    threadId: text("thread_id").references(() => discussionThreads.id, {
+      onDelete: "cascade",
+    }),
+    commentId: text("comment_id").references(() => discussionComments.id, {
+      onDelete: "cascade",
+    }),
+    listingId: text("listing_id").references(() => listings.id, {
+      onDelete: "cascade",
+    }),
+    revisionId: text("revision_id").references(() => revisions.id, {
+      onDelete: "cascade",
+    }),
+    triggeredById: text("triggered_by_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    isRead: boolean("is_read").default(false).notNull(),
+    createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
+  },
+  (table) => [
+    index("notification_user_idx").on(table.userId),
+    index("notification_user_read_idx").on(table.userId, table.isRead),
+  ]
+);
+
+export const notificationsRelations = relations(notifications, ({ one }) => ({
+  user: one(users, {
+    fields: [notifications.userId],
+    references: [users.id],
+  }),
+  thread: one(discussionThreads, {
+    fields: [notifications.threadId],
+    references: [discussionThreads.id],
+  }),
+  comment: one(discussionComments, {
+    fields: [notifications.commentId],
+    references: [discussionComments.id],
+  }),
+  listing: one(listings, {
+    fields: [notifications.listingId],
+    references: [listings.id],
+  }),
+  revision: one(revisions, {
+    fields: [notifications.revisionId],
+    references: [revisions.id],
+  }),
+  triggeredBy: one(users, {
+    fields: [notifications.triggeredById],
+    references: [users.id],
+    relationName: "triggeredNotifications",
   }),
 }));
