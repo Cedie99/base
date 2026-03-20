@@ -5,8 +5,8 @@ import { AddListingButton } from "@/components/submission/add-listing-button";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Data Centers — BASE",
-  description: "Browse data centers in the BASE database.",
+  title: "Data Centers — MESH",
+  description: "Browse data centers in the MESH database.",
 };
 
 export default async function DatacentersPage() {

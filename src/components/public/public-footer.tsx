@@ -16,7 +16,7 @@ export function PublicFooter() {
                 <Database className="h-4 w-4 text-neutral-600 dark:text-neutral-300" />
               </div>
               <span className="bg-gradient-to-b from-neutral-900 to-neutral-400 bg-clip-text text-lg font-bold text-transparent dark:from-white dark:to-neutral-400">
-                BASE
+                MESH
               </span>
             </Link>
             <p className="text-sm leading-relaxed text-neutral-500">
@@ -78,7 +78,7 @@ export function PublicFooter() {
 
         {/* Copyright */}
         <div className="mt-16 border-t border-neutral-200/80 pt-8 text-center text-sm text-neutral-400 dark:border-neutral-800/50 dark:text-neutral-600">
-          &copy; {new Date().getFullYear()} BASE. All rights reserved.
+          &copy; {new Date().getFullYear()} MESH. All rights reserved.
         </div>
       </div>
     </footer>

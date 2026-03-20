@@ -43,10 +43,23 @@ export function GraphCanvas({ data }: GraphCanvasProps) {
       // Add edges
       data.edges.forEach((edge) => {
         if (graph.hasNode(edge.source) && graph.hasNode(edge.target)) {
+          const edgeColorByType: Record<string, string> =
+            theme === "dark"
+              ? {
+                  person: "#a78bfa",
+                  datacenter: "#34d399",
+                  partner: "#fbbf24",
+                }
+              : {
+                  person: "#7c3aed",
+                  datacenter: "#059669",
+                  partner: "#d97706",
+                };
+
           try {
             graph.addEdge(edge.source, edge.target, {
-              size: 1,
-              color: theme === "dark" ? "#404040" : "#d4d4d4",
+              size: 2.4,
+              color: edgeColorByType[edge.type] || (theme === "dark" ? "#71717a" : "#94a3b8"),
               type: "line",
             });
           } catch {
@@ -79,7 +92,7 @@ export function GraphCanvas({ data }: GraphCanvasProps) {
       const sigma = new Sigma(graph, containerRef.current, {
         renderEdgeLabels: false,
         labelColor: { color: labelColor },
-        defaultEdgeColor: theme === "dark" ? "#404040" : "#d4d4d4",
+        defaultEdgeColor: theme === "dark" ? "#71717a" : "#94a3b8",
         labelRenderedSizeThreshold: 0,
         labelFont: "DM Sans, sans-serif",
         labelSize: 14,

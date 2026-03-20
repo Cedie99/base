@@ -32,8 +32,10 @@ export function GraphView() {
 
   const { data, isLoading, error } = useQuery<{ data: GraphData }>({
     queryKey: ["graph"],
-    queryFn: () => fetch("/api/v1/graph").then((r) => r.json()),
-    staleTime: 5 * 60 * 1000,
+    queryFn: () => fetch("/api/v1/graph", { cache: "no-store" }).then((r) => r.json()),
+    staleTime: 0,
+    refetchOnWindowFocus: true,
+    refetchInterval: 30_000,
   });
 
   const filteredData = useMemo(() => {

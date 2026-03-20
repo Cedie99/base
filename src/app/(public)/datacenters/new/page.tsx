@@ -2,7 +2,7 @@ import { SubmissionForm } from "@/components/submission/submission-form";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Add Data Center — BASE",
+  title: "Add Data Center — MESH",
 };
 
 export default function NewDatacenterPage() {
@@ -11,7 +11,7 @@ export default function NewDatacenterPage() {
       <div>
         <h1 className="text-2xl font-bold">Add a Data Center</h1>
         <p className="text-muted-foreground">
-          Submit a new data center to the BASE database.
+          Submit a new data center to the MESH database.
         </p>
       </div>
       <SubmissionForm category="datacenter" />

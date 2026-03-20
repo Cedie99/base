@@ -2,7 +2,7 @@
 
 import { SearchBar } from "@/components/search/search-bar";
 import { ChevronDown } from "lucide-react";
-import { BaseLogo } from "@/components/base-logo";
+import { MeshLogo } from "@/components/mesh-logo";
 import { TypewriterEffect } from "@/components/ui/typewriter-effect";
 import { Sparkles } from "@/components/ui/sparkles";
 
@@ -32,7 +32,7 @@ export function HeroSearch() {
         >
           <h1 className="text-5xl font-bold tracking-tighter sm:text-7xl md:text-8xl">
             <span className="bg-gradient-to-b from-neutral-900 to-neutral-400 bg-clip-text text-transparent dark:from-white dark:to-neutral-400">
-              BASE
+              MESH
             </span>
           </h1>
         </Sparkles>

@@ -11,8 +11,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
   const thread = await getThreadById(id);
-  if (!thread) return { title: "Thread Not Found — BASE" };
-  return { title: `${thread.title} — Discussions — BASE` };
+  if (!thread) return { title: "Thread Not Found — MESH" };
+  return { title: `${thread.title} — Discussions — MESH` };
 }
 
 export default async function ThreadPage({

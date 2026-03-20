@@ -7,7 +7,7 @@ import { CATEGORY_LABELS, CATEGORY_PLURAL_URL } from "@/types/listings";
 import { GitCompareArrows, ArrowLeft, AlertTriangle } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Compare Listings — BASE",
+  title: "Compare Listings — MESH",
   description:
     "Compare hosting companies, data centers, and registrars side by side.",
 };

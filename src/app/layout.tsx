@@ -14,9 +14,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BASE — Web Hosting Industry Database",
+  title: "Mesh — Web Hosting Industry Database",
   description:
     "A community-driven database of web hosting companies, data centers, domain registrars, and industry professionals.",
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

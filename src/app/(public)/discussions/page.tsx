@@ -3,7 +3,7 @@ import { getThreads, getThreadCount } from "@/lib/discussions.queries";
 import { ThreadList } from "@/components/discussions/thread-list";
 
 export const metadata: Metadata = {
-  title: "Discussions — BASE",
+  title: "Discussions — MESH",
   description: "Community discussions about the web hosting industry",
 };
 

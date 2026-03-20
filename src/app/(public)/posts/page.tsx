@@ -6,8 +6,8 @@ import type { Category } from "@/types/listings";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "All Posts — BASE",
-  description: "Browse all listings across companies, data centers, registrars, and people in the BASE database.",
+  title: "All Posts — MESH",
+  description: "Browse all listings across companies, data centers, registrars, and people in the MESH database.",
 };
 
 const validCategories = new Set<string>(["company", "datacenter", "registrar", "person"]);

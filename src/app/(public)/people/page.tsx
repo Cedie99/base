@@ -5,8 +5,8 @@ import { AddListingButton } from "@/components/submission/add-listing-button";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "People — BASE",
-  description: "Browse industry professionals in the BASE database.",
+  title: "People — MESH",
+  description: "Browse industry professionals in the MESH database.",
 };
 
 export default async function PeoplePage() {

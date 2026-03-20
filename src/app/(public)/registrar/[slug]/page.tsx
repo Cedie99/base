@@ -12,8 +12,8 @@ export async function generateMetadata({
   const listing = await getPublicListingBySlug("registrar", slug);
   if (!listing) return { title: "Not Found" };
   return {
-    title: `${listing.name} — BASE`,
-    description: listing.overview?.slice(0, 160) ?? `${listing.name} registrar profile on BASE.`,
+    title: `${listing.name} — MESH`,
+    description: listing.overview?.slice(0, 160) ?? `${listing.name} registrar profile on MESH.`,
   };
 }
 

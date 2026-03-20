@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { Menu, X, Sun, Moon, User } from "lucide-react";
 import { SearchBar } from "@/components/search/search-bar";
-import { BaseLogo } from "@/components/base-logo";
+import { MeshLogo } from "@/components/mesh-logo";
 
 const primaryLinks = [
   { href: "/companies", label: "Companies" },
@@ -39,9 +39,9 @@ export function PublicHeader({ user }: PublicHeaderProps = {}) {
     <header className="sticky top-0 z-50 border-b border-neutral-200/80 bg-white/70 backdrop-blur-xl dark:border-neutral-800/50 dark:bg-black/70">
       <div className="mx-auto flex h-16 max-w-[90rem] items-center gap-6 px-4 lg:px-6">
         <Link href="/" className="flex shrink-0 items-center gap-2.5">
-          <BaseLogo size={30} />
+          <MeshLogo size={30} />
           <span className="bg-gradient-to-b from-neutral-900 to-neutral-500 bg-clip-text text-lg font-bold text-transparent dark:from-white dark:to-neutral-400">
-            BASE
+            Mesh
           </span>
         </Link>
 

@@ -24,7 +24,7 @@ export function ThreadList({
     <div className="space-y-4">
       {showNewThread && (
         <div className="flex items-center justify-between">
-          <h2 className={compact ? "text-base font-semibold text-neutral-900 dark:text-white" : "text-lg font-semibold text-neutral-900 dark:text-white"}>
+          <h2 className={compact ? "text-MESH font-semibold text-neutral-900 dark:text-white" : "text-lg font-semibold text-neutral-900 dark:text-white"}>
             {compact ? "Discussions" : ""}
           </h2>
           <Link

@@ -1,4 +1,4 @@
-# BASE — Project Context
+# Mesh — Project Context
 
 > A user-generated database for the web hosting industry, inspired by Crunchbase.
 > Full spec: `docs/PROJECT_SPEC.md`
@@ -54,7 +54,7 @@ src/
 │   └── globals.css              # Tailwind theme + CSS variables + animations
 ├── components/
 │   ├── auth/                    # LoginForm, RegisterForm
-│   ├── base-logo.tsx            # SVG logo component with dark mode support
+│   ├── mesh-logo.tsx            # SVG mesh network logo component with dark mode support
 │   ├── compare/                 # CompareProvider, CompareButton, CompareBar, ComparisonTable
 │   ├── dashboard/               # Header, Sidebar, UserNav, NotificationBell, moderation/
 │   │   └── moderation/          # ModerationQueue, ModerationTabs, PendingEditsQueue
@@ -143,7 +143,8 @@ AUTH_URL=http://localhost:3000
 
 ## What We're Building
 
-BASE is a community-driven database with 4 categories:
+Mesh is a community-driven database with 4 categories:
+
 - **Companies** — web hosting providers
 - **Data Centers** — data center profiles
 - **Domain Registrars** — registrar profiles
@@ -152,6 +153,7 @@ BASE is a community-driven database with 4 categories:
 Each category has **Listings** (profile pages) composed of **Widgets** (modular info blocks). Widgets only appear when filled with content.
 
 **Listing page layout:**
+
 - Companies/Registrars: Sidebar (logo, info, offices, people, DCs, products) + Body (overview, screenshots, milestones, coupons, sources)
 - Data Centers: Sidebar (logo, info, offices, DC locations, people) + Body (overview, screenshots, milestones, network architecture, sources)
 - People: Sidebar (photo, info, degrees, companies, interests) + Body (overview, milestones, sources)
@@ -161,6 +163,7 @@ Each category has **Listings** (profile pages) composed of **Widgets** (modular 
 **User roles**: Administrator (full access), Moderator (content approval), User (submit for approval), Anonymous (submit for approval, IP tracked).
 
 **Key features**:
+
 - Live search with auto-complete (Cmd+K), SEO-friendly URLs (`/company/hostgator`)
 - Revision history with before/after diffs, duplicate prevention
 - Pending revision system (user edits create pending revisions for moderator approval; listing stays live until approved)
@@ -172,6 +175,7 @@ Each category has **Listings** (profile pages) composed of **Widgets** (modular 
 - Embeddable listing cards
 
 **Products are category-specific** (`PRODUCTS_BY_CATEGORY`):
+
 - Companies: Shared Hosting, VPS, Dedicated, Colocation, Cloud, SSL, etc.
 - Registrars: Domain Registration, Parking, Search, Private Whois, DNS Hosting, etc.
 - Data Centers: Colocation, Dedicated Hosting, Cloud Hosting, Managed Hosting, etc.

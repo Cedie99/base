@@ -100,7 +100,7 @@ export function SearchBar({
             onFocus={() => results && setIsOpen(true)}
             className={`w-full rounded-xl border border-neutral-200 bg-white text-neutral-900 placeholder:text-neutral-400 transition-all duration-200 focus:border-neutral-300 focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:border-neutral-800 dark:bg-neutral-900/80 dark:text-white dark:placeholder:text-neutral-600 dark:focus:border-neutral-700 dark:focus:ring-neutral-700 ${
               isLg
-                ? "h-14 pl-12 pr-4 text-base"
+                ? "h-14 pl-12 pr-4 text-MESH"
                 : "h-9 pl-9 pr-9 text-sm"
             }`}
           />

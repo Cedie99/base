@@ -23,7 +23,7 @@ export const GET = withApiMiddleware(async (request: Request) => {
   return Response.json({
     version: "1.0",
     type: "rich",
-    provider_name: "BASE",
+    provider_name: "Mesh",
     provider_url: baseUrl,
     title: listing.name,
     html: `<iframe src="${baseUrl}/api/v1/embed/${category}/${slug}" width="400" height="180" frameborder="0" style="border-radius:12px;border:1px solid #e5e5e5"></iframe>`,

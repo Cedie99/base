@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="#171717"/>
+  
+  <!-- Mesh nodes and connections -->
+  <!-- Top-left node -->
+  <circle cx="120" cy="120" r="12" fill="white"/>
+  <!-- Top-right node -->
+  <circle cx="392" cy="120" r="12" fill="white"/>
+  <!-- Center node -->
+  <circle cx="256" cy="256" r="12" fill="white"/>
+  <!-- Bottom-left node -->
+  <circle cx="120" cy="392" r="12" fill="white"/>
+  <!-- Bottom-right node -->
+  <circle cx="392" cy="392" r="12" fill="white"/>
+  
+  <!-- Connection lines -->
+  <!-- Top-left to top-right -->
+  <line x1="120" y1="120" x2="392" y2="120" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <!-- Top-left to center -->
+  <line x1="120" y1="120" x2="256" y2="256" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <!-- Top-right to center -->
+  <line x1="392" y1="120" x2="256" y2="256" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <!-- Bottom-left to center -->
+  <line x1="120" y1="392" x2="256" y2="256" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <!-- Bottom-right to center -->
+  <line x1="392" y1="392" x2="256" y2="256" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <!-- Bottom-left to bottom-right -->
+  <line x1="120" y1="392" x2="392" y2="392" stroke="white" stroke-width="3" stroke-linecap="round"/>
+</svg>

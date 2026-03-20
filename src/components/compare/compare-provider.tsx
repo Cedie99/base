@@ -21,7 +21,7 @@ interface CompareContextValue {
 
 const CompareContext = createContext<CompareContextValue | null>(null);
 
-const STORAGE_KEY = "base-compare-items";
+const STORAGE_KEY = "mesh-compare-items";
 const MAX_ITEMS = 3;
 
 export function CompareProvider({ children }: { children: React.ReactNode }) {

@@ -5,8 +5,8 @@ import { AddListingButton } from "@/components/submission/add-listing-button";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Companies — BASE",
-  description: "Browse web hosting companies in the BASE database.",
+  title: "Companies — MESH",
+  description: "Browse web hosting companies in the MESH database.",
 };
 
 export default async function CompaniesPage() {

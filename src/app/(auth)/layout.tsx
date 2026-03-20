@@ -19,7 +19,7 @@ export default function AuthLayout({
             <Database className="h-5 w-5 text-neutral-600 dark:text-neutral-300" />
           </div>
           <span className="bg-gradient-to-b from-neutral-900 to-neutral-400 bg-clip-text text-xl font-bold text-transparent dark:from-white dark:to-neutral-400">
-            BASE
+            MESH
           </span>
         </Link>
 

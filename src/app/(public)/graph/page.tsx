@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { GraphView } from "@/components/graph/graph-view";
 
 export const metadata: Metadata = {
-  title: "Industry Relationship Graph — BASE",
+  title: "Industry Relationship Graph — MESH",
   description:
     "Interactive visualization of connections between hosting companies, data centers, registrars, and people.",
 };

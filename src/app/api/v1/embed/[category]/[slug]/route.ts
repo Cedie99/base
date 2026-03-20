@@ -59,7 +59,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
     ${listing.url ? `<span>${listing.url.replace(/^https?:\/\//, "")}</span>` : ""}
   </div>
   <div class="footer">
-    <span>Powered by BASE</span>
+    <span>Powered by MESH</span>
     <span>View Profile &rarr;</span>
   </div>
 </a>

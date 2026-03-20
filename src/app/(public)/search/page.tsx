@@ -13,7 +13,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { q } = await searchParams;
   return {
-    title: q ? `Search: ${q} — BASE` : "Search — BASE",
+    title: q ? `Search: ${q} — MESH` : "Search — MESH",
   };
 }
 

@@ -45,7 +45,7 @@ export function FeaturesGrid() {
     <section className="space-y-10">
       <SectionLabel
         label="Features"
-        title="Why BASE?"
+        title="Why MESH?"
         description="Everything you need to explore and contribute to the web hosting industry database."
       />
       <div ref={ref} className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

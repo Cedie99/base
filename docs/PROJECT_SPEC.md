@@ -1,4 +1,4 @@
-# BASE — Project Specification
+# Mesh — Project Specification
 
 > A user-generated database of information related to the web hosting industry.
 > Inspired by [Crunchbase](https://www.crunchbase.com).
@@ -7,7 +7,7 @@
 
 ## Overview
 
-BASE is a community-driven database covering web hosting companies, data centers, domain name registrars, and industry professionals. Content is organized into **Categories → Listings → Widgets**, and all data can be submitted and edited by anyone — with role-based approval workflows.
+Mesh is a community-driven database covering web hosting companies, data centers, domain name registrars, and industry professionals. Content is organized into **Categories → Listings → Widgets**, and all data can be submitted and edited by anyone — with role-based approval workflows.
 
 ---
 
@@ -17,14 +17,15 @@ BASE is a community-driven database covering web hosting companies, data centers
 
 Top-level sections that organize database content:
 
-| Category | Description |
-|---|---|
-| **Companies** | Web hosting providers and related companies |
-| **Data Centers** | Data center profiles |
-| **Domain Name Registrars** | Domain registrar profiles |
-| **People** | Industry professionals |
+| Category                   | Description                                 |
+| -------------------------- | ------------------------------------------- |
+| **Companies**              | Web hosting providers and related companies |
+| **Data Centers**           | Data center profiles                        |
+| **Domain Name Registrars** | Domain registrar profiles                   |
+| **People**                 | Industry professionals                      |
 
 **Future categories** (post-launch):
+
 - **Events** — conferences, trade shows, conventions, workshops, social networking events
 - **Software** — virtualization panels, helpdesk software, billing systems, popular scripts/OS
 
@@ -38,12 +39,12 @@ Modular information blocks within a listing (e.g., description, logo, address, t
 
 ### Users
 
-| Role | Permissions |
-|---|---|
+| Role              | Permissions                                                                                                             |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | **Administrator** | Submit content (no approval), manage all submissions, manage moderators & users, reset passwords, view revision history |
-| **Moderator** | Submit content (no approval), approve/reject/edit user submissions, view revision history, pin/lock discussion threads |
-| **User** | Submit content (requires moderator/admin approval), view revision history, create discussions, post comments |
-| **Anonymous** | Submit content (requires approval), IP address recorded, view revision history |
+| **Moderator**     | Submit content (no approval), approve/reject/edit user submissions, view revision history, pin/lock discussion threads  |
+| **User**          | Submit content (requires moderator/admin approval), view revision history, create discussions, post comments            |
+| **Anonymous**     | Submit content (requires approval), IP address recorded, view revision history                                          |
 
 > Deleting a user/moderator does **not** delete their contributed content.
 
@@ -91,10 +92,11 @@ Modular information blocks within a listing (e.g., description, logo, address, t
 
 ### Companies & Domain Registrars
 
-**Left sidebar:** Logo, General Information, Offices, People, Data Centers, Products, Control Panels, *Service Providers (deferred)*
+**Left sidebar:** Logo, General Information, Offices, People, Data Centers, Products, Control Panels, _Service Providers (deferred)_
 **Body:** Description, Hosting Info, Screenshots, Milestones, Coupons, IP Ranges, Discussions, Sources
 
 Additional per-listing actions:
+
 - Edit this page → `/company/{slug}/edit`
 - Revision History → `/company/{slug}/revisions`
 - Add to Compare (up to 3 listings)
@@ -117,112 +119,114 @@ Additional per-listing actions:
 
 ### Company
 
-| Widget | Status |
-|---|---|
-| Company Name | ✅ Implemented |
-| Logo | ✅ Implemented |
-| General Information | ✅ Implemented |
-| Company Overview | ✅ Implemented |
-| Milestones | ✅ Implemented |
-| Videos | ✅ Implemented |
-| Tags | ✅ Implemented |
-| Offices | ✅ Implemented |
-| People | ✅ Implemented |
-| Products | ✅ Implemented |
-| Funding | ✅ Implemented |
-| Acquisitions | ✅ Implemented |
-| Exit | ✅ Implemented |
-| Partners | ✅ Implemented |
-| Screenshots | ✅ Implemented |
-| Datacenter(s) | ✅ Implemented |
-| Recent News | ✅ Implemented |
-| Coupons | ✅ Implemented |
-| External Links | ✅ Implemented |
-| Sources | ✅ Implemented |
-| Control Panels | ✅ Implemented |
+| Widget                                   | Status         |
+| ---------------------------------------- | -------------- |
+| Company Name                             | ✅ Implemented |
+| Logo                                     | ✅ Implemented |
+| General Information                      | ✅ Implemented |
+| Company Overview                         | ✅ Implemented |
+| Milestones                               | ✅ Implemented |
+| Videos                                   | ✅ Implemented |
+| Tags                                     | ✅ Implemented |
+| Offices                                  | ✅ Implemented |
+| People                                   | ✅ Implemented |
+| Products                                 | ✅ Implemented |
+| Funding                                  | ✅ Implemented |
+| Acquisitions                             | ✅ Implemented |
+| Exit                                     | ✅ Implemented |
+| Partners                                 | ✅ Implemented |
+| Screenshots                              | ✅ Implemented |
+| Datacenter(s)                            | ✅ Implemented |
+| Recent News                              | ✅ Implemented |
+| Coupons                                  | ✅ Implemented |
+| External Links                           | ✅ Implemented |
+| Sources                                  | ✅ Implemented |
+| Control Panels                           | ✅ Implemented |
 | Hosting Info (ASN, Uptime, Green Energy) | ✅ Implemented |
-| IP Ranges | ✅ Implemented |
-| *Service Providers* | 🔮 Deferred |
+| IP Ranges                                | ✅ Implemented |
+| _Service Providers_                      | 🔮 Deferred    |
 
 ### Data Center
 
-| Widget | Status |
-|---|---|
-| Company Name | ✅ Implemented |
-| Logo | ✅ Implemented |
-| General Information | ✅ Implemented |
-| Company Overview | ✅ Implemented |
-| Milestones | ✅ Implemented |
-| Videos | ✅ Implemented |
-| Tags | ✅ Implemented |
-| Offices | ✅ Implemented |
-| Data Center Locations | ⬜ Planned — separate from Offices, full address for each DC location |
-| People | ✅ Implemented |
-| Products | ✅ Implemented |
-| Funding | ✅ Implemented |
-| Acquisitions | ✅ Implemented |
-| Exit | ✅ Implemented |
-| Partners | ✅ Implemented |
-| Screenshots | ✅ Implemented |
-| Network Architecture | ⬜ Planned — text + images describing network map |
-| Recent News | ✅ Implemented |
-| External Links | ✅ Implemented |
-| Sources | ✅ Implemented |
-| Control Panels | ✅ Implemented |
-| Hosting Info (ASN, Uptime, Green Energy) | ✅ Implemented |
-| IP Ranges | ✅ Implemented |
+| Widget                                   | Status                                                                |
+| ---------------------------------------- | --------------------------------------------------------------------- |
+| Company Name                             | ✅ Implemented                                                        |
+| Logo                                     | ✅ Implemented                                                        |
+| General Information                      | ✅ Implemented                                                        |
+| Company Overview                         | ✅ Implemented                                                        |
+| Milestones                               | ✅ Implemented                                                        |
+| Videos                                   | ✅ Implemented                                                        |
+| Tags                                     | ✅ Implemented                                                        |
+| Offices                                  | ✅ Implemented                                                        |
+| Data Center Locations                    | ⬜ Planned — separate from Offices, full address for each DC location |
+| People                                   | ✅ Implemented                                                        |
+| Products                                 | ✅ Implemented                                                        |
+| Funding                                  | ✅ Implemented                                                        |
+| Acquisitions                             | ✅ Implemented                                                        |
+| Exit                                     | ✅ Implemented                                                        |
+| Partners                                 | ✅ Implemented                                                        |
+| Screenshots                              | ✅ Implemented                                                        |
+| Network Architecture                     | ⬜ Planned — text + images describing network map                     |
+| Recent News                              | ✅ Implemented                                                        |
+| External Links                           | ✅ Implemented                                                        |
+| Sources                                  | ✅ Implemented                                                        |
+| Control Panels                           | ✅ Implemented                                                        |
+| Hosting Info (ASN, Uptime, Green Energy) | ✅ Implemented                                                        |
+| IP Ranges                                | ✅ Implemented                                                        |
 
 ### Domain Name Registrar
 
-| Widget | Status |
-|---|---|
-| Company Name | ✅ Implemented |
-| Logo | ✅ Implemented |
-| General Information | ✅ Implemented |
-| Company Overview | ✅ Implemented |
-| Milestones | ✅ Implemented |
-| Videos | ✅ Implemented |
-| Tags | ✅ Implemented |
-| Offices | ✅ Implemented |
-| People | ✅ Implemented |
-| Products | ✅ Implemented |
-| Funding | ✅ Implemented |
-| Acquisitions | ✅ Implemented |
-| Exit | ✅ Implemented |
-| Partners | ✅ Implemented |
-| Screenshots | ✅ Implemented |
-| Recent News | ✅ Implemented |
-| Coupons | ✅ Implemented |
-| External Links | ✅ Implemented |
-| Sources | ✅ Implemented |
-| Control Panels | ✅ Implemented |
+| Widget                                   | Status         |
+| ---------------------------------------- | -------------- |
+| Company Name                             | ✅ Implemented |
+| Logo                                     | ✅ Implemented |
+| General Information                      | ✅ Implemented |
+| Company Overview                         | ✅ Implemented |
+| Milestones                               | ✅ Implemented |
+| Videos                                   | ✅ Implemented |
+| Tags                                     | ✅ Implemented |
+| Offices                                  | ✅ Implemented |
+| People                                   | ✅ Implemented |
+| Products                                 | ✅ Implemented |
+| Funding                                  | ✅ Implemented |
+| Acquisitions                             | ✅ Implemented |
+| Exit                                     | ✅ Implemented |
+| Partners                                 | ✅ Implemented |
+| Screenshots                              | ✅ Implemented |
+| Recent News                              | ✅ Implemented |
+| Coupons                                  | ✅ Implemented |
+| External Links                           | ✅ Implemented |
+| Sources                                  | ✅ Implemented |
+| Control Panels                           | ✅ Implemented |
 | Hosting Info (ASN, Uptime, Green Energy) | ✅ Implemented |
-| IP Ranges | ✅ Implemented |
-| *Service Providers* | 🔮 Deferred |
+| IP Ranges                                | ✅ Implemented |
+| _Service Providers_                      | 🔮 Deferred    |
 
 ### People
 
-| Widget | Status |
-|---|---|
-| Name (First + Last) | ✅ Implemented |
-| Overview | ✅ Implemented |
-| Photo | ✅ Implemented |
-| General Information (social links, birthplace, etc.) | ✅ Implemented |
-| Degrees | ✅ Implemented |
-| Companies (associated with title, start/end date) | ⬜ Planned |
-| Interests (keyword tags) | ⬜ Planned — currently uses Tags widget |
-| Milestones | ✅ Implemented |
-| External Links | ✅ Implemented |
-| Sources | ✅ Implemented |
+| Widget                                               | Status                                  |
+| ---------------------------------------------------- | --------------------------------------- |
+| Name (First + Last)                                  | ✅ Implemented                          |
+| Overview                                             | ✅ Implemented                          |
+| Photo                                                | ✅ Implemented                          |
+| General Information (social links, birthplace, etc.) | ✅ Implemented                          |
+| Degrees                                              | ✅ Implemented                          |
+| Companies (associated with title, start/end date)    | ⬜ Planned                              |
+| Interests (keyword tags)                             | ⬜ Planned — currently uses Tags widget |
+| Milestones                                           | ✅ Implemented                          |
+| External Links                                       | ✅ Implemented                          |
+| Sources                                              | ✅ Implemented                          |
 
 ---
 
 ## Widget Field Definitions
 
 ### Company Name
+
 The title of the listing page.
 
 ### Logo
+
 - Graphic uploaded, automatically resized/scaled to 250px width
 - If source file < 250px width, not modified; height fluctuates
 - Max file size enforced
@@ -230,6 +234,7 @@ The title of the listing page.
 ### General Information
 
 **Companies:**
+
 - Company name (legal)
 - Website URL
 - Blog URL
@@ -249,16 +254,19 @@ The title of the listing page.
 
 **Domain Registrars:**
 Same as Companies, except:
+
 - Replace server/hosting counts with **Total Domains**
 - Same payment methods
 
 **Data Centers:**
 Same as Companies, except:
+
 - **Number of Data Centers** (numeric input)
 - **Total Square Footage**
 - No server/hosting-specific counts
 
 **People:**
+
 - First Name, Last Name
 - Birthplace (city, country)
 - Birthdate (dropdown)
@@ -278,9 +286,11 @@ Same as Companies, except:
 > **Current implementation note:** Status and Class are merged into one `companyStatus` enum: `privately_held`, `publicly_held`, `acquired`, `out_of_business`. Payment methods and some category-specific fields (Blog Feed URL, Total Square Footage, stock ticker, YouTube/MySpace) are not yet in the schema.
 
 ### Company Overview
+
 Free-text neutral description of the company/entity.
 
 ### Offices
+
 - Name of the office / label
 - Address line 1
 - Address line 2
@@ -291,11 +301,13 @@ Free-text neutral description of the company/entity.
 - HQ tag (optional)
 
 ### Data Center Locations (Data Centers only)
+
 Same fields as Offices — separate widget for physical DC location addresses. Distinct from corporate offices.
 
 > **Not yet implemented.** Currently data centers reuse the Offices widget.
 
 ### People (widget within Company/DC/Registrar)
+
 - Name (with auto-complete to prevent duplicates)
 - If name not in database, option to create new Person listing
 - "Past" checkbox to identify people no longer with the entity
@@ -304,6 +316,7 @@ Same fields as Offices — separate widget for physical DC location addresses. D
 - End date
 
 ### Companies (widget within People)
+
 - Company name (with auto-complete)
 - If name not in database, option to create new Company listing
 - "Past" checkbox for previous employment
@@ -333,19 +346,23 @@ Products appear on listings as tag-format hyperlinks (clickable/searchable).
 > **Implementation note:** Category-specific product lists are implemented via `PRODUCTS_BY_CATEGORY` in `src/types/listings.ts`. Each category (company, registrar, datacenter) has its own predefined product list. `PREDEFINED_PRODUCTS` is kept for backward compatibility as a combined unique list.
 
 ### Screenshots
+
 - Website screenshots, user panel, product images
 - Auto-resized to fit body width
 - Limit: 2 screenshots per listing
 - Max file size enforced
 
 ### Datacenter(s) (Company/Registrar widget)
+
 - Names of associated data centers
 - Auto-complete to prevent duplicates (URL shown below name for disambiguation)
 - Links to Data Center listings
 - If name not in database, option to create new DC listing
 
 ### Milestones
+
 Repeatable entries with:
+
 - Description
 - Date
 - Source Title
@@ -353,6 +370,7 @@ Repeatable entries with:
 - "Add" button to create new, "Remove" link to delete
 
 ### Network Architecture (Data Centers only)
+
 Text + images that define network architecture / map of service. Combines description and screenshot functionality in one module.
 
 > **Not yet implemented.**
@@ -360,6 +378,7 @@ Text + images that define network architecture / map of service. Combines descri
 ### Coupons (Companies & Domain Registrars)
 
 **V1.0 (current target):**
+
 - **Code** — coupon code
 - **Discount description** — what the coupon offers
 - **Expiration date** — optional
@@ -369,6 +388,7 @@ Text + images that define network architecture / map of service. Combines descri
 - Reports tracked by IP/userID to prevent duplicate reports
 
 **V2.0 (future):**
+
 - **Success rate** — community voting (Yes/No: "did this coupon work?")
 - Display in two sections: Active coupons and Unreliable coupons
 - Sorted by success percentage descending
@@ -376,6 +396,7 @@ Text + images that define network architecture / map of service. Combines descri
 > **Current implementation:** Has `code`, `discount`, `expiresAt`, `votesYes`, `votesNo` fields (V2.0 schema).
 
 ### Control Panels (Companies, Data Centers & Registrars)
+
 - Name of control panel (e.g., cPanel, Plesk, DirectAdmin)
 - Version (optional)
 - Is Default (boolean) — marks the primary/default panel
@@ -383,6 +404,7 @@ Text + images that define network architecture / map of service. Combines descri
 > **Implemented.** Database table: `listingControlPanels`. Displayed on listing pages with version info and default indicator.
 
 ### Hosting Info (Companies, Data Centers & Registrars)
+
 - ASN (Autonomous System Number)
 - Uptime Guarantee (percentage)
 - Green Energy Certified (boolean)
@@ -391,6 +413,7 @@ Text + images that define network architecture / map of service. Combines descri
 > **Implemented.** Fields stored on the listing record. Displayed as a grid on listing pages.
 
 ### IP Ranges (Companies, Data Centers & Registrars)
+
 - Type: IPv4 or IPv6
 - CIDR notation (e.g., `192.168.0.0/24`)
 - Description (optional)
@@ -398,23 +421,28 @@ Text + images that define network architecture / map of service. Combines descri
 > **Implemented.** Database table: `listingIpRanges`. Supports both IPv4 and IPv6 ranges.
 
 ### Degrees (People only)
+
 - Institution
 - Subject(s)
 - Degree Type
 - Graduation Year
 
 ### Interests (People only)
+
 Keywords that define social interests, comma-separated.
 
 > **Not yet implemented** as distinct widget. Currently uses the Tags widget.
 
 ### External Links
+
 Important links about the entity.
 
 ### Sources
+
 Reference URLs where content was sourced (wiki-style citations). Always displayed at the bottom of the listing page.
 
 ### Recent News
+
 Feed of news headlines relevant to the listing.
 
 ---
@@ -422,17 +450,20 @@ Feed of news headlines relevant to the listing.
 ## Key Features
 
 ### Search
+
 - Cross-search by Name and URL simultaneously
 - Live auto-complete as user types (debounced 300ms)
 - Results grouped by category with category icons/colors
 - Keyboard shortcut: `Cmd+K` / `Ctrl+K` to focus search
 
 ### Duplicate Prevention
+
 - Auto-complete on submission forms surfaces existing entries
 - System warns user if a matching listing already exists
 - Slug uniqueness enforced per category
 
 ### Revision History
+
 - Every listing tracks last edit timestamp
 - "Edit this page" link on each listing
 - "Revision History" link shows all past edits with before/after diffs
@@ -443,6 +474,7 @@ Feed of news headlines relevant to the listing.
 - Moderators can approve (applies the `after` snapshot including widget changes) or reject (listing unchanged) pending revisions from the dashboard
 
 ### Submission Forms
+
 - All widgets displayed on one page for new listing creation, including offices and products editors
 - Category-specific: `/companies/new`, `/datacenters/new`, `/registrars/new`, `/people/new`
 - Edit existing: `/company/{slug}/edit`, `/datacenter/{slug}/edit`, `/registrar/{slug}/edit`, `/person/{slug}/edit`
@@ -452,12 +484,14 @@ Feed of news headlines relevant to the listing.
 - Widget editors: OfficesEditor (dynamic add/remove offices), ProductsEditor (category-specific checkbox grid), ListEditor (generic list widget editor) — hidden for `person` category where not applicable
 
 ### Listing Cards (Embeddable)
+
 - Compact "business card" style embed for any listing
 - Can be inserted into external pages (iframe or embed code)
 - Available via `/api/v1/embed/:category/:slug`
 - oEmbed support at `/api/v1/oembed?url=`
 
 ### Community Discussions
+
 - Threaded discussions linked to specific listings or site-wide
 - Nested comments with replies
 - Moderator tools: pin threads, lock threads, delete threads/comments
@@ -467,6 +501,7 @@ Feed of news headlines relevant to the listing.
 - Database tables: `discussionThreads`, `discussionComments`
 
 ### Listing Comparison
+
 - Side-by-side comparison of up to 3 listings from the same category
 - Compare button on listing cards and listing pages
 - Persistent compare cart (localStorage-backed)
@@ -474,6 +509,7 @@ Feed of news headlines relevant to the listing.
 - URL-based: `/compare?items=category:slug,category:slug`
 
 ### Relationship Graph
+
 - Interactive force-directed graph visualization
 - Shows connections between companies, data centers, registrars, and people
 - Node size reflects connection count
@@ -483,6 +519,7 @@ Feed of news headlines relevant to the listing.
 - Route: `/graph`
 
 ### Notification System
+
 - Real-time notifications for user interactions
 - Notification types: thread replies, comment replies, listing approved/rejected, revision approved/rejected, listing edited, listing discussion started
 - Unread count badge on dashboard notification bell
@@ -491,7 +528,8 @@ Feed of news headlines relevant to the listing.
 - API endpoint: `GET /api/notifications`
 
 ### Public REST API (v1)
-- Full read-only API for external access to the BASE database
+
+- Full read-only API for external access to the Mesh database
 - No authentication required
 - Rate limited: 60 requests per minute per IP
 - CORS enabled (all origins)
@@ -511,11 +549,13 @@ Feed of news headlines relevant to the listing.
 ## Database Schema
 
 ### Core Tables
+
 - `users` — user accounts with roles (admin, moderator, user)
 - `listings` — all listing profiles across categories
 - `revisions` — revision history with before/after JSONB and approval tracking
 
 ### Widget Tables
+
 - `listingOffices` — office locations with HQ designation
 - `listingProducts` — products/services offered
 - `listingPeople` — associated people with title and dates
@@ -537,6 +577,7 @@ Feed of news headlines relevant to the listing.
 - `listingIpRanges` — IPv4/IPv6 CIDR ranges
 
 ### Community Tables
+
 - `discussionThreads` — discussion threads (title, body, pinned, locked, listing reference)
 - `discussionComments` — comments with nested reply support
 - `notifications` — user notification inbox
@@ -546,9 +587,11 @@ Feed of news headlines relevant to the listing.
 ## Deferred Features
 
 ### Service Providers
+
 Companies that provide services/products to the listed entity: marketing/advertising/SEO agency, domain registrar, data center, web design firm, technology partners (cPanel, SWsoft, etc), server management companies. Requires expanding the database with new categories (SEO companies, Web Design companies, etc.). Current priority: connect Companies, Data Centers, and Domain Registrars only.
 
 ### Scientific Data
+
 External data feeds from sites like Quantcast, Compete, WebHosting.info, SEMRush. Potential partnership opportunity. Competitive intelligence data for visitors.
 
 ---

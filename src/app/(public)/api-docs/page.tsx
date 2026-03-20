@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "API Documentation — BASE",
-  description: "Public REST API for accessing the BASE hosting industry database.",
+  title: "API Documentation — MESH",
+  description: "Public REST API for accessing the MESH hosting industry database.",
 };
 
 function Endpoint({
@@ -59,12 +59,12 @@ export default function ApiDocsPage() {
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">API Documentation</h1>
         <p className="mt-2 text-neutral-500 dark:text-neutral-400">
-          Access the BASE hosting industry database via our public REST API. All endpoints return JSON and require no authentication.
+          Access the MESH hosting industry database via our public REST API. All endpoints return JSON and require no authentication.
         </p>
       </div>
 
       <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/50 p-6 space-y-3">
-        <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Base URL</h2>
+        <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">MESH URL</h2>
         <code className="block rounded-lg bg-neutral-100 dark:bg-neutral-800 p-3 text-sm font-mono text-neutral-700 dark:text-neutral-200">
           /api/v1
         </code>

@@ -1,4 +1,4 @@
-# BASE
+# Mesh
 
 A community-driven database for the web hosting industry, inspired by Crunchbase. Discover detailed profiles for web hosting companies, data centers, domain registrars, and industry professionals.
 
@@ -43,17 +43,20 @@ A community-driven database for the web hosting industry, inspired by Crunchbase
 ### Setup
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/Cedie99/base.git
    cd base
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Set up environment variables:
+
    ```env
    DATABASE_URL=postgresql://...
    AUTH_SECRET=your-secret-key
@@ -61,6 +64,7 @@ A community-driven database for the web hosting industry, inspired by Crunchbase
    ```
 
 4. Push the database schema:
+
    ```bash
    npm run db:push
    ```
@@ -74,15 +78,15 @@ Open [http://localhost:3000](http://localhost:3000) to view the app.
 
 ## Scripts
 
-| Command | Description |
-|---|---|
-| `npm run dev` | Start dev server |
-| `npm run build` | Production build |
-| `npm run lint` | Run ESLint |
+| Command               | Description                 |
+| --------------------- | --------------------------- |
+| `npm run dev`         | Start dev server            |
+| `npm run build`       | Production build            |
+| `npm run lint`        | Run ESLint                  |
 | `npm run db:generate` | Generate Drizzle migrations |
-| `npm run db:migrate` | Run migrations |
-| `npm run db:push` | Push schema to database |
-| `npm run db:studio` | Open Drizzle Studio |
+| `npm run db:migrate`  | Run migrations              |
+| `npm run db:push`     | Push schema to database     |
+| `npm run db:studio`   | Open Drizzle Studio         |
 
 ## Project Structure
 
@@ -112,17 +116,17 @@ src/
 
 ## API
 
-BASE provides a public REST API at `/api/v1`. Rate limited to 60 requests per minute per IP.
+Mesh provides a public REST API at `/api/v1`. Rate limited to 60 requests per minute per IP.
 
-| Endpoint | Description |
-|---|---|
-| `GET /api/v1/listings` | List approved listings (with category/pagination filters) |
-| `GET /api/v1/listings/:category/:slug` | Get single listing with all widgets |
-| `GET /api/v1/categories` | Get category counts |
-| `GET /api/v1/search?q=query` | Search listings by name |
-| `GET /api/v1/graph` | Relationship graph data (nodes + edges) |
-| `GET /api/v1/embed/:category/:slug` | Embeddable HTML card |
-| `GET /api/v1/oembed?url=` | oEmbed endpoint for rich previews |
+| Endpoint                               | Description                                               |
+| -------------------------------------- | --------------------------------------------------------- |
+| `GET /api/v1/listings`                 | List approved listings (with category/pagination filters) |
+| `GET /api/v1/listings/:category/:slug` | Get single listing with all widgets                       |
+| `GET /api/v1/categories`               | Get category counts                                       |
+| `GET /api/v1/search?q=query`           | Search listings by name                                   |
+| `GET /api/v1/graph`                    | Relationship graph data (nodes + edges)                   |
+| `GET /api/v1/embed/:category/:slug`    | Embeddable HTML card                                      |
+| `GET /api/v1/oembed?url=`              | oEmbed endpoint for rich previews                         |
 
 Full documentation available at `/api-docs` when the app is running.
 

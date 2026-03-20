@@ -27,7 +27,7 @@ export function RegisterForm() {
       <CardHeader>
         <CardTitle className="text-2xl">Create Account</CardTitle>
         <CardDescription>
-          Join BASE to contribute to the web hosting database
+          Join Mesh to contribute to the web hosting database
         </CardDescription>
       </CardHeader>
       <form action={formAction}>

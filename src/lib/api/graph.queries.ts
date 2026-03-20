@@ -63,7 +63,6 @@ export async function getGraphData(categoryFilter?: Category): Promise<GraphData
 
   // Build edges
   const edges: GraphEdge[] = [];
-  const connectedIds = new Set<string>();
 
   for (const link of personLinks) {
     if (!link.personListingId) continue;
@@ -78,8 +77,6 @@ export async function getGraphData(categoryFilter?: Category): Promise<GraphData
       type: "person",
       label: link.name,
     });
-    connectedIds.add(link.listingId);
-    connectedIds.add(link.personListingId);
   }
 
   for (const link of dcLinks) {
@@ -94,8 +91,6 @@ export async function getGraphData(categoryFilter?: Category): Promise<GraphData
       target: link.datacenterListingId,
       type: "datacenter",
     });
-    connectedIds.add(link.listingId);
-    connectedIds.add(link.datacenterListingId);
   }
 
   for (const link of partnerLinks) {
@@ -110,22 +105,16 @@ export async function getGraphData(categoryFilter?: Category): Promise<GraphData
       target: link.partnerListingId,
       type: "partner",
     });
-    connectedIds.add(link.listingId);
-    connectedIds.add(link.partnerListingId);
   }
 
-  // Build nodes (only include connected listings)
+  // Build nodes from all approved listings so isolated listings are visible too.
   const degreeMap = new Map<string, number>();
   for (const edge of edges) {
     degreeMap.set(edge.source, (degreeMap.get(edge.source) || 0) + 1);
     degreeMap.set(edge.target, (degreeMap.get(edge.target) || 0) + 1);
   }
 
-  // If no edges exist, show all listings as nodes so the graph isn't empty
-  const showAll = connectedIds.size === 0;
-
   let nodes: GraphNode[] = allListings
-    .filter((l) => showAll || connectedIds.has(l.id))
     .map((l) => ({
       id: l.id,
       label: l.name,

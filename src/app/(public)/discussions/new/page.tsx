@@ -4,7 +4,7 @@ import { getCurrentUser } from "@/lib/auth.helpers";
 import { NewThreadForm } from "@/components/discussions/new-thread-form";
 
 export const metadata: Metadata = {
-  title: "New Discussion — BASE",
+  title: "New Discussion — MESH",
 };
 
 export default async function NewThreadPage({

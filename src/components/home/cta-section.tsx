@@ -31,7 +31,7 @@ export function CTASection() {
           Help Build the Database
         </h2>
         <p className="text-neutral-500">
-          BASE is community-driven. Share your knowledge about the web hosting industry —
+          MESH is community-driven. Share your knowledge about the web hosting industry —
           add a company, data center, registrar, or industry professional.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4">
